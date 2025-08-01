@@ -450,22 +450,31 @@ CONTEXT UNDERSTANDING:
 - If only one item was shown and user says "add to cart", add that item automatically
 - Be smart about understanding references like "add that phone", "I want the cheaper one", etc.
 
+NAVIGATION COMMANDS:
+- "take me to cart", "go to cart", "show cart", "cart page", "tap on cart", "click cart" → action: "navigate", data: {"page": "cart"}
+- "take me to home", "go home", "home page", "tap on home", "click home" → action: "navigate", data: {"page": "home"}  
+- "show devices", "device page", "go to devices", "tap on devices", "click devices" → action: "navigate", data: {"page": "devices"}
+- "show plans", "plan page", "go to plans", "tap on plans", "click plans" → action: "navigate", data: {"page": "plans"}
+- Also handle variations like "open devices", "navigate to plans", etc.
+
 Handle user voice queries for:
 1. Product search and recommendations (with error correction)
 2. Plan comparisons  
 3. Adding items to cart (remember what was previously shown)
 4. Checking cart and proceeding to checkout
-5. General assistance
+5. Navigation to different pages (home, devices, plans, cart)
+6. General assistance
 
 Always respond in JSON format:
 {{
     "response": "Your conversational response to the user (mention if you corrected their speech)",
-    "action": "search|add_to_cart|show_cart|checkout|compare|none",
+    "action": "search|add_to_cart|show_cart|checkout|compare|navigate|none",
     "data": {{
         "recommended_devices": [device objects if search],
         "recommended_plans": [plan objects if search],
         "cart_items": [{{id, name, price, type}} if adding to cart],
-        "comparison": "comparison details if comparing"
+        "comparison": "comparison details if comparing",
+        "page": "home|devices|plans|cart if navigate action"
     }},
     "language": "{request.language}"
 }}

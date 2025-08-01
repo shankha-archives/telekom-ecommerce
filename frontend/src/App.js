@@ -16,6 +16,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(null);
   const [isListening, setIsListening] = useState(false);
+  const [isChatListening, setIsChatListening] = useState(false);
   const [voiceResponse, setVoiceResponse] = useState('');
   const [cart, setCart] = useState([]);
   const [currentView, setCurrentView] = useState('home');
@@ -100,40 +101,97 @@ function App() {
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
 
-      recognitionRef.current.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        handleVoiceSearch(transcript);
-      };
-
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
+        setIsChatListening(false);
       };
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
+        setIsChatListening(false);
       };
     }
   };
 
   const toggleVoiceSearch = () => {
-    if (!isChatExpanded) {
-      expandChatWithGreeting();
-    }
-
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+        recognitionRef.current.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          handleSearchVoiceInput(transcript);
+        };
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert('Speech recognition not supported in your browser');
+      }
+    }
+  };
+
+  const toggleChatVoice = () => {
+    if (isChatListening) {
+      recognitionRef.current?.stop();
+      setIsChatListening(false);
       setIsInConversationMode(false);
     } else {
       if (recognitionRef.current) {
         recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+        recognitionRef.current.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          handleVoiceSearch(transcript);
+        };
         recognitionRef.current.start();
-        setIsListening(true);
-        setIsInConversationMode(true); // Enable conversation mode
+        setIsChatListening(true);
+        setIsInConversationMode(true);
       } else {
         alert('Speech recognition not supported in your browser');
       }
+    }
+  };
+
+  const handleSearchVoiceInput = async (transcript) => {
+    // Set the search query and perform search
+    setSearchQuery(transcript);
+    setVoiceResponse(`Searching for: ${transcript}`);
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/voice-search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: transcript,
+          session_id: sessionId,
+          language: language,
+          last_search_results: lastSearchResults
+        })
+      });
+
+      const result = await response.json();
+      
+      // Handle search results
+      if (result.action === 'search' && result.data) {
+        const searchResultsData = {
+          devices: result.data.recommended_devices || [],
+          plans: result.data.recommended_plans || [],
+          recommendation: result.response
+        };
+        setSearchResults(searchResultsData);
+        setLastSearchResults(searchResultsData);
+      } else {
+        // Fallback to direct results if no action specified
+        setSearchResults(result);
+      }
+      
+      setCurrentView('search');
+      setVoiceResponse('');
+    } catch (error) {
+      console.error('Search error:', error);
+      setVoiceResponse('');
     }
   };
 
@@ -142,8 +200,12 @@ function App() {
       setTimeout(() => {
         if (recognitionRef.current && isInConversationMode) {
           try {
+            recognitionRef.current.onresult = (event) => {
+              const transcript = event.results[0][0].transcript;
+              handleVoiceSearch(transcript);
+            };
             recognitionRef.current.start();
-            setIsListening(true);
+            setIsChatListening(true);
           } catch (error) {
             console.error('Error restarting recognition:', error);
           }
@@ -155,7 +217,7 @@ function App() {
   const minimizeChat = () => {
     setIsChatExpanded(false);
     setIsChatMinimized(false); // Don't show minimized state, just close
-    setIsListening(false);
+    setIsChatListening(false);
     setIsInConversationMode(false);
     recognitionRef.current?.stop();
   };
@@ -178,6 +240,77 @@ function App() {
       timestamp: new Date().toISOString()
     };
     setChatHistory(prev => [...prev, userMessage]);
+    setIsTyping(false);
+
+    // Check for navigation commands locally first
+    const lowerTranscript = transcript.toLowerCase();
+    console.log('Voice command received:', lowerTranscript); // Debug log
+    
+    const navigationCommands = [
+      { 
+        patterns: ['cart', 'my cart', 'shopping cart'], 
+        keywords: ['take me to cart', 'go to cart', 'show cart', 'cart page', 'open cart', 'tap on cart', 'click cart', 'navigate to cart'],
+        page: 'cart' 
+      },
+      { 
+        patterns: ['home'], 
+        keywords: ['take me to home', 'go to home', 'home page', 'go home', 'main page', 'tap on home', 'click home', 'navigate to home'],
+        page: 'home' 
+      },
+      { 
+        patterns: ['device', 'phone', 'mobile', 'smartphone'], 
+        keywords: ['take me to devices', 'go to devices', 'show devices', 'device page', 'devices page', 'tap on devices', 'click devices', 'navigate to devices', 'open devices'],
+        page: 'devices' 
+      },
+      { 
+        patterns: ['plan', 'subscription'], 
+        keywords: ['take me to plans', 'go to plans', 'show plans', 'plan page', 'plans page', 'tap on plans', 'click plans', 'navigate to plans', 'open plans'],
+        page: 'plans' 
+      }
+    ];
+
+    for (const command of navigationCommands) {
+      // Check for exact keyword matches first (more specific)
+      const keywordMatch = command.keywords.some(keyword => lowerTranscript.includes(keyword));
+      
+      // Check for pattern matches (contains the word and navigation intent)
+      const hasNavigationIntent = lowerTranscript.includes('take me') || 
+                                  lowerTranscript.includes('go to') || 
+                                  lowerTranscript.includes('show') || 
+                                  lowerTranscript.includes('page') ||
+                                  lowerTranscript.includes('tap on') ||
+                                  lowerTranscript.includes('click') ||
+                                  lowerTranscript.includes('navigate to') ||
+                                  lowerTranscript.includes('open');
+      
+      const patternMatch = hasNavigationIntent && 
+                          command.patterns.some(pattern => lowerTranscript.includes(pattern));
+      
+      if (keywordMatch || patternMatch) {
+        console.log('Navigation detected for page:', command.page); // Debug log
+        setCurrentView(command.page);
+        const navMessage = {
+          type: 'assistant',
+          message: `✅ Navigated to ${command.page.charAt(0).toUpperCase() + command.page.slice(1)} page`,
+          timestamp: new Date().toISOString()
+        };
+        setChatHistory(prev => [...prev, navMessage]);
+        
+        // Speak navigation confirmation
+        if ('speechSynthesis' in window) {
+          const speechText = `Taking you to the ${command.page} page`;
+          const utterance = new SpeechSynthesisUtterance(speechText);
+          utterance.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+          utterance.rate = 0.9;
+          utterance.onend = () => {
+            startListeningAfterResponse();
+          };
+          speechSynthesis.speak(utterance);
+        }
+        return; // Exit early if navigation command detected
+      }
+    }
+
     setIsTyping(true);
 
     try {
@@ -231,6 +364,19 @@ function App() {
         result.data.cart_items.forEach(item => {
           addToCart(item, item.type);
         });
+      } else if (result.action === 'navigate' && result.data.page) {
+        // Handle page navigation
+        const page = result.data.page.toLowerCase();
+        if (['home', 'devices', 'plans', 'cart'].includes(page)) {
+          setCurrentView(page);
+          // Add navigation confirmation to chat
+          const navMessage = {
+            type: 'assistant',
+            message: `✅ Navigated to ${page.charAt(0).toUpperCase() + page.slice(1)} page`,
+            timestamp: new Date().toISOString()
+          };
+          setChatHistory(prev => [...prev, navMessage]);
+        }
       }
       
       // Speak the response with smart content
@@ -266,6 +412,11 @@ function App() {
         // Smart speech for cart actions
         if (result.action === 'add_to_cart') {
           speechText = result.response; // Keep the confirmation message
+        }
+        
+        // Smart speech for navigation actions
+        if (result.action === 'navigate' && result.data.page) {
+          speechText = `Taking you to the ${result.data.page} page`;
         }
         
         const utterance = new SpeechSynthesisUtterance(speechText);
@@ -320,7 +471,7 @@ function App() {
     setIsChatMinimized(false);
     // Keep chat history - this was the bug!
     setLastSearchResults(null);
-    setIsListening(false);
+    setIsChatListening(false);
     setIsInConversationMode(false);
     recognitionRef.current?.stop();
   };
@@ -328,21 +479,42 @@ function App() {
   const handleTextSearch = async () => {
     if (!searchQuery.trim()) return;
 
+    // Set loading state
+    setVoiceResponse(`Searching for: ${searchQuery}`);
+    
     try {
-      const response = await fetch(`${BACKEND_URL}/api/search`, {
+      const response = await fetch(`${BACKEND_URL}/api/voice-search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          query: searchQuery,
-          session_id: sessionId
+          text: searchQuery,
+          session_id: sessionId,
+          language: language,
+          last_search_results: lastSearchResults
         })
       });
 
-      const results = await response.json();
-      setSearchResults(results);
+      const result = await response.json();
+      
+      // Handle search results
+      if (result.action === 'search' && result.data) {
+        const searchResultsData = {
+          devices: result.data.recommended_devices || [],
+          plans: result.data.recommended_plans || [],
+          recommendation: result.response
+        };
+        setSearchResults(searchResultsData);
+        setLastSearchResults(searchResultsData);
+      } else {
+        // Fallback to direct results if no action specified
+        setSearchResults(result);
+      }
+      
       setCurrentView('search');
+      setVoiceResponse('');
     } catch (error) {
       console.error('Search error:', error);
+      setVoiceResponse('');
     }
   };
 
@@ -725,50 +897,52 @@ function App() {
 
   const ExpandedChatInterface = () => {
     return (
-      <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-2xl shadow-2xl z-50 overflow-hidden">
+      <div 
+        style={{
+          position: "fixed",
+          bottom: 150,
+          right: 32,
+          width: 400,
+          maxHeight: 500,
+          zIndex: 1001
+        }}
+        className="bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden"
+      >
         <div className="flex items-center justify-between p-4 bg-gradient-to-r from-magenta-600 to-magenta-700 text-white">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-5 h-5" />
             <span className="font-semibold">Your Telekom Assistant</span>
-            {isListening && (
+            {isChatListening && (
               <div className="flex items-center gap-1 ml-2">
                 <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
                 <span className="text-xs">Listening...</span>
               </div>
             )}
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-2">
             <Button
               onClick={minimizeChat}
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
-              title="Minimize Chat"
+              className="text-white bg-red-500 hover:bg-red-600 p-1 h-7 w-7 transition-colors rounded-md border-0"
+              title="Close Chat"
             >
-              <Minus className="w-4 h-4" />
+              <X className="w-3 h-3" />
             </Button>
             <Button
               onClick={startOver}
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
+              className="text-white bg-blue-500 hover:bg-blue-600 p-1 h-7 w-7 transition-colors rounded-md border-0"
               title="Start Over"
             >
-              <RotateCcw className="w-4 h-4" />
-            </Button>
-            <Button
-              onClick={closeChatExpansion}
-              variant="ghost" 
-              size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
-              title="Close Chat"
-            >
-              <X className="w-4 h-4" />
-            </Button>
+              <RotateCcw className="w-3 h-3" />
+           </Button>
+       
           </div>
         </div>
         
-        <div className="h-96 overflow-y-auto p-4 bg-gray-50 chat-scrollbar">
+        <div className="h-80 overflow-y-auto p-4 bg-gray-50 chat-scrollbar">
           <div className="space-y-2">
             {chatHistory.map((message, index) => (
               <ChatMessage key={index} message={message} />
@@ -793,7 +967,7 @@ function App() {
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleChatInput()}
-              placeholder={isListening ? "Listening..." : "Type your message..."}
+              placeholder={isChatListening ? "Listening..." : "Type your message..."}
               className="flex-1 rounded-xl border-gray-300 focus:border-magenta-500 focus:ring-magenta-500"
             />
             <Button
@@ -805,15 +979,15 @@ function App() {
               <Send className="w-4 h-4" />
             </Button>
             <Button
-              onClick={toggleVoiceSearch}
+              onClick={toggleChatVoice}
               size="sm"
               className={`px-4 rounded-xl transition-colors ${
-                isListening 
+                isChatListening 
                   ? 'bg-red-500 hover:bg-red-600 text-white' 
                   : 'bg-gray-500 hover:bg-gray-600 text-white'
               }`}
             >
-              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              {isChatListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </Button>
           </div>
         </div>
@@ -835,17 +1009,14 @@ function App() {
             </div>
             
             {/* Smart Search Bar */}
-            <div className="flex-1 max-w-2xl mx-8 relative chat-container">
+            <div className="flex-1 max-w-2xl mx-8 relative">
               <div className="relative">
                 <Input
                   placeholder="Ask me anything about devices and plans..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleTextSearch()}
-                  onFocus={handleSearchFocus}
-                  className={`pr-20 h-12 border-gray-300 focus:border-magenta-500 focus:ring-magenta-500 rounded-xl transition-all duration-300 ${
-                    isChatExpanded ? 'rounded-b-none border-b-0' : ''
-                  }`}
+                  className="pr-20 h-12 border-gray-300 focus:border-magenta-500 focus:ring-magenta-500 rounded-xl transition-all duration-300"
                 />
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
                   <button
@@ -866,9 +1037,6 @@ function App() {
                   </button>
                 </div>
               </div>
-              
-              {/* Expanded Chat Interface */}
-              {isChatExpanded && <ExpandedChatInterface />}
             </div>
 
             <div className="flex items-center gap-4">
@@ -989,6 +1157,37 @@ function App() {
           </div>
         </div>
       </footer>
+      
+      {/* Standalone Chat Interface */}
+      {isChatExpanded && <ExpandedChatInterface />}
+      
+      {/* Chat Icon */}
+      {!isChatExpanded && (
+        <button
+          onClick={expandChatWithGreeting}
+          aria-label="Open Chatbot"
+          style={{
+            position: "fixed",
+            bottom: 120,
+            right: 20,
+            zIndex: 1000,
+            background: "#d50072",
+            border: "none",
+            borderRadius: "50%",
+            boxShadow: "0 4px 12px rgba(213, 0, 114, 0.3)",
+            width: 56,
+            height: 56,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "all 0.3s ease"
+          }}
+          className="hover:shadow-2xl hover:scale-110"
+        >
+          <MessageCircle style={{ width: 32, height: 32, color: "#fff" }} />
+        </button>
+      )}
     </div>
   );
 }
