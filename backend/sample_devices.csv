@@ -3,3 +3,107 @@ MF_99935696,Apple iPhone 16 Pro,Apple,1149.0,1149.0,https://dtdl-static-natco.es
 MF_99935697,Apple iPhone 15 Pro,Apple,1099.0,1099.0,https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/iphone15pro.png,,"eSIM;NFC",128_GB,Titan Blau,
 MF_99935698,Samsung Galaxy S24 Ultra,Samsung,1399.0,1399.0,https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/galaxys24ultra.png,,"eSIM;NFC;5G",256_GB,Schwarz,
 MF_99935699,Google Pixel 8 Pro,Google,999.0,999.0,https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/pixel8pro.png,,"eSIM;NFC;5G",128_GB,Obsidian,
+MF_10001,Samsung Galaxy S24,Samsung,849.0,899.0,/images/devices/samsung/galaxy-s24.jpg,"Latest flagship with AI features","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",256_GB,Phantom Black,4.6
+MF_10002,Samsung Galaxy S23,Samsung,699.0,799.0,/images/devices/samsung/galaxy-s23.jpg,"Previous flagship with great performance","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",128_GB,Phantom Violet,4.5
+MF_10003,Samsung Galaxy A54,Samsung,389.0,449.0,/images/devices/samsung/galaxy-a54.jpg,"Mid-range with premium features","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Awesome Graphite,4.3
+MF_10004,Samsung Galaxy A34,Samsung,319.0,369.0,/images/devices/samsung/galaxy-a34.jpg,"Reliable mid-range option","5G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Awesome Silver,4.2
+MF_10005,Samsung Galaxy A24,Samsung,229.0,279.0,/images/devices/samsung/galaxy-a24.jpg,"Budget-friendly with good camera","4G;NFC;Fingerprint;Multiple Cameras",128_GB,Awesome Black,4.1
+MF_10006,Samsung Galaxy A14,Samsung,159.0,199.0,/images/devices/samsung/galaxy-a14.jpg,"Entry-level smartphone","4G;Fingerprint;Multiple Cameras",64_GB,Black,4.0
+MF_10007,Samsung Galaxy Z Fold5,Samsung,1799.0,1899.0,/images/devices/samsung/galaxy-zfold5.jpg,"Premium foldable experience","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",256_GB,Phantom Black,4.4
+MF_10008,Samsung Galaxy Z Flip5,Samsung,999.0,1099.0,/images/devices/samsung/galaxy-zflip5.jpg,"Compact foldable design","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",256_GB,Mint,4.3
+MF_10009,Samsung Galaxy S22,Samsung,599.0,699.0,/images/devices/samsung/galaxy-s22.jpg,"Older flagship still powerful","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",128_GB,Phantom White,4.4
+MF_10010,Samsung Galaxy A73,Samsung,449.0,499.0,/images/devices/samsung/galaxy-a73.jpg,"Large screen mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Awesome Gray,4.2
+MF_10011,Samsung Galaxy A53,Samsung,329.0,399.0,/images/devices/samsung/galaxy-a53.jpg,"Balanced mid-range device","5G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Awesome Blue,4.1
+MF_10012,Samsung Galaxy A33,Samsung,269.0,329.0,/images/devices/samsung/galaxy-a33.jpg,"Affordable 5G option","5G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Awesome Peach,4.0
+MF_10013,Samsung Galaxy A13,Samsung,149.0,199.0,/images/devices/samsung/galaxy-a13.jpg,"Basic smartphone features","4G;Fingerprint;Multiple Cameras",64_GB,Blue,3.9
+MF_10014,Samsung Galaxy S21 FE,Samsung,549.0,649.0,/images/devices/samsung/galaxy-s21fe.jpg,"Fan edition with flagship features","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",128_GB,Olive,4.3
+MF_10015,Samsung Galaxy Note20,Samsung,649.0,799.0,/images/devices/samsung/galaxy-note20.jpg,"Productivity powerhouse with S Pen","5G;eSIM;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras",256_GB,Mystic Bronze,4.2
+MF_10016,Apple iPhone 16,Apple,949.0,999.0,/images/devices/apple/iphone-16.jpg,"Latest iPhone with advanced features","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Pink,4.7
+MF_10017,Apple iPhone 15,Apple,849.0,899.0,/images/devices/apple/iphone-15.jpg,"Previous generation excellence","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Blue,4.6
+MF_10018,Apple iPhone 14,Apple,729.0,799.0,/images/devices/apple/iphone-14.jpg,"Reliable flagship performance","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Purple,4.5
+MF_10019,Apple iPhone 13,Apple,629.0,699.0,/images/devices/apple/iphone-13.jpg,"Still powerful option","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Starlight,4.4
+MF_10020,Apple iPhone 12,Apple,529.0,599.0,/images/devices/apple/iphone-12.jpg,"First 5G iPhone","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",64_GB,Red,4.3
+MF_10021,Apple iPhone SE 2022,Apple,429.0,479.0,/images/devices/apple/iphone-se-2022.jpg,"Compact with modern power","5G;eSIM;NFC;Wireless Charging;IP67;Face ID",64_GB,Midnight,4.2
+MF_10022,Apple iPhone 14 Pro,Apple,1099.0,1199.0,/images/devices/apple/iphone-14-pro.jpg,"Pro features and performance","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras;OLED",128_GB,Deep Purple,4.6
+MF_10023,Apple iPhone 13 Pro,Apple,999.0,1099.0,/images/devices/apple/iphone-13-pro.jpg,"Previous Pro model","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras;OLED",128_GB,Sierra Blue,4.5
+MF_10024,Apple iPhone 15 Plus,Apple,949.0,1049.0,/images/devices/apple/iphone-15-plus.jpg,"Larger screen experience","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Yellow,4.4
+MF_10025,Apple iPhone 14 Plus,Apple,829.0,929.0,/images/devices/apple/iphone-14-plus.jpg,"Big screen iPhone","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",128_GB,Blue,4.3
+MF_10026,Apple iPhone 12 mini,Apple,449.0,529.0,/images/devices/apple/iphone-12-mini.jpg,"Compact 5G iPhone","5G;eSIM;NFC;Wireless Charging;IP68;Face ID;Multiple Cameras",64_GB,Green,4.1
+MF_10027,Xiaomi 14,Xiaomi,799.0,899.0,/images/devices/xiaomi/xiaomi-14.jpg,"Flagship with Leica cameras","5G;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Black,4.4
+MF_10028,Xiaomi 13,Xiaomi,649.0,749.0,/images/devices/xiaomi/xiaomi-13.jpg,"Previous flagship","5G;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,White,4.3
+MF_10029,Xiaomi Redmi Note 13 Pro,Xiaomi,329.0,379.0,/images/devices/xiaomi/redmi-note-13-pro.jpg,"Mid-range with great camera","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Midnight Black,4.2
+MF_10030,Xiaomi Redmi Note 12,Xiaomi,229.0,279.0,/images/devices/xiaomi/redmi-note-12.jpg,"Budget-friendly option","4G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Ocean Blue,4.1
+MF_10031,Xiaomi Poco X5 Pro,Xiaomi,349.0,399.0,/images/devices/xiaomi/poco-x5-pro.jpg,"Gaming-focused mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Yellow,4.2
+MF_10032,Xiaomi Redmi 12,Xiaomi,179.0,229.0,/images/devices/xiaomi/redmi-12.jpg,"Entry-level smartphone","4G;Fingerprint;Multiple Cameras",128_GB,Polar Silver,4.0
+MF_10033,Xiaomi 12T Pro,Xiaomi,599.0,699.0,/images/devices/xiaomi/xiaomi-12t-pro.jpg,"Performance flagship","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Meteorite Black,4.3
+MF_10034,Xiaomi Redmi A2,Xiaomi,99.0,129.0,/images/devices/xiaomi/redmi-a2.jpg,"Ultra-budget option","4G;Fingerprint",64_GB,Classic Blue,3.8
+MF_10035,Xiaomi 13 Pro,Xiaomi,899.0,999.0,/images/devices/xiaomi/xiaomi-13-pro.jpg,"Pro flagship model","5G;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Ceramic White,4.4
+MF_10036,Xiaomi Poco F5,Xiaomi,399.0,449.0,/images/devices/xiaomi/poco-f5.jpg,"Performance at great price","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Snowstorm White,4.2
+MF_10037,Xiaomi Redmi Note 11,Xiaomi,199.0,249.0,/images/devices/xiaomi/redmi-note-11.jpg,"Reliable mid-range","4G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Graphite Gray,4.0
+MF_10038,Xiaomi Mi 11 Lite,Xiaomi,299.0,349.0,/images/devices/xiaomi/mi-11-lite.jpg,"Lightweight design","5G;NFC;AMOLED;Fingerprint;Multiple Cameras",128_GB,Truffle Black,4.1
+MF_10039,Google Pixel 8,Google,699.0,799.0,/images/devices/google/pixel-8.jpg,"Pure Android experience","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",128_GB,Hazel,4.5
+MF_10040,Google Pixel 7a,Google,449.0,499.0,/images/devices/google/pixel-7a.jpg,"Affordable Pixel experience","5G;eSIM;NFC;Wireless Charging;IP67;Fingerprint;AI Camera",128_GB,Charcoal,4.3
+MF_10041,Google Pixel 7,Google,599.0,699.0,/images/devices/google/pixel-7.jpg,"Previous generation Pixel","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",128_GB,Lemongrass,4.4
+MF_10042,Google Pixel 6a,Google,349.0,399.0,/images/devices/google/pixel-6a.jpg,"Budget Pixel with great camera","5G;eSIM;NFC;Fingerprint;AI Camera",128_GB,Sage,4.2
+MF_10043,Google Pixel 6,Google,499.0,599.0,/images/devices/google/pixel-6.jpg,"First Tensor chip Pixel","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",128_GB,Sorta Seafoam,4.3
+MF_10044,Google Pixel Fold,Google,1799.0,1899.0,/images/devices/google/pixel-fold.jpg,"Google's foldable phone","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",256_GB,Obsidian,4.2
+MF_10045,Google Pixel 7 Pro,Google,849.0,949.0,/images/devices/google/pixel-7-pro.jpg,"Pro Pixel with telephoto","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",128_GB,Snow,4.4
+MF_10046,Google Pixel 6 Pro,Google,699.0,799.0,/images/devices/google/pixel-6-pro.jpg,"Previous Pro model","5G;eSIM;NFC;Wireless Charging;IP68;Fingerprint;AI Camera;OLED",128_GB,Cloudy White,4.3
+MF_10047,OnePlus 12,OnePlus,899.0,999.0,/images/devices/oneplus/oneplus-12.jpg,"Latest flagship killer","5G;NFC;Wireless Charging;IP65;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Silky Black,4.4
+MF_10048,OnePlus 11,OnePlus,699.0,799.0,/images/devices/oneplus/oneplus-11.jpg,"Previous flagship","5G;NFC;Wireless Charging;IP64;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Titan Black,4.3
+MF_10049,OnePlus Nord 3,OnePlus,429.0,479.0,/images/devices/oneplus/oneplus-nord-3.jpg,"Mid-range with flagship features","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Misty Green,4.2
+MF_10050,OnePlus 10T,OnePlus,599.0,699.0,/images/devices/oneplus/oneplus-10t.jpg,"Speed-focused flagship","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Moonstone Black,4.2
+MF_10051,OnePlus Nord CE 3,OnePlus,329.0,379.0,/images/devices/oneplus/oneplus-nord-ce-3.jpg,"Core edition mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Aqua Surge,4.1
+MF_10052,OnePlus 10 Pro,OnePlus,749.0,849.0,/images/devices/oneplus/oneplus-10-pro.jpg,"Pro flagship model","5G;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Volcanic Black,4.3
+MF_10053,OnePlus Nord 2T,OnePlus,379.0,429.0,/images/devices/oneplus/oneplus-nord-2t.jpg,"Balanced mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Gray Shadow,4.1
+MF_10054,OnePlus 9,OnePlus,529.0,629.0,/images/devices/oneplus/oneplus-9.jpg,"Older flagship still good","5G;NFC;Wireless Charging;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Winter Mist,4.2
+MF_10055,OnePlus Nord N30,OnePlus,249.0,299.0,/images/devices/oneplus/oneplus-nord-n30.jpg,"Budget-friendly Nord","5G;NFC;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Chromatic Gray,4.0
+MF_10056,Oppo Find X6 Pro,Oppo,1099.0,1199.0,/images/devices/oppo/oppo-find-x6-pro.jpg,"Premium flagship","5G;NFC;Wireless Charging;IP68;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Desert Silver,4.3
+MF_10057,Oppo Reno 10 Pro,Oppo,599.0,649.0,/images/devices/oppo/oppo-reno-10-pro.jpg,"Portrait photography expert","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Silvery Grey,4.2
+MF_10058,Oppo A98,Oppo,329.0,379.0,/images/devices/oppo/oppo-a98.jpg,"Mid-range with good camera","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Cool Black,4.1
+MF_10059,Oppo A78,Oppo,249.0,299.0,/images/devices/oppo/oppo-a78.jpg,"Affordable smartphone","5G;NFC;Fingerprint;Multiple Cameras",128_GB,Glowing Black,4.0
+MF_10060,Oppo Reno 8,Oppo,449.0,499.0,/images/devices/oppo/oppo-reno-8.jpg,"Stylish mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Starry Blue,4.1
+MF_10061,Oppo A58,Oppo,199.0,249.0,/images/devices/oppo/oppo-a58.jpg,"Budget option","4G;NFC;Fingerprint;Multiple Cameras",128_GB,Glowing Green,3.9
+MF_10062,Oppo Find N3,Oppo,1699.0,1799.0,/images/devices/oppo/oppo-find-n3.jpg,"Foldable flagship","5G;NFC;Wireless Charging;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",512_GB,Gold,4.2
+MF_10063,Oppo Reno 9,Oppo,399.0,449.0,/images/devices/oppo/oppo-reno-9.jpg,"Camera-focused device","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Sunset Pink,4.1
+MF_10064,Oppo A38,Oppo,169.0,199.0,/images/devices/oppo/oppo-a38.jpg,"Entry-level smartphone","4G;Fingerprint;Multiple Cameras",128_GB,Glowing Gold,3.8
+MF_10065,Realme GT 3,Realme,649.0,699.0,/images/devices/realme/realme-gt-3.jpg,"Gaming flagship","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Pulse White,4.3
+MF_10066,Realme 11 Pro+,Realme,399.0,449.0,/images/devices/realme/realme-11-pro-plus.jpg,"Mid-range with premium features","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Sunrise Beige,4.2
+MF_10067,Realme 11,Realme,299.0,349.0,/images/devices/realme/realme-11.jpg,"Balanced mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Glory Black,4.1
+MF_10068,Realme C55,Realme,199.0,249.0,/images/devices/realme/realme-c55.jpg,"Budget-friendly option","4G;NFC;Fingerprint;Multiple Cameras",128_GB,Sun Shower,4.0
+MF_10069,Realme 10 Pro+,Realme,349.0,399.0,/images/devices/realme/realme-10-pro-plus.jpg,"Previous generation Pro","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Nebula Blue,4.1
+MF_10070,Realme C51,Realme,149.0,179.0,/images/devices/realme/realme-c51.jpg,"Entry-level smartphone","4G;Fingerprint;Multiple Cameras",64_GB,Mint Green,3.9
+MF_10071,Realme GT 2,Realme,499.0,599.0,/images/devices/realme/realme-gt-2.jpg,"Previous gaming flagship","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Paper White,4.2
+MF_10072,Realme 9 Pro+,Realme,319.0,369.0,/images/devices/realme/realme-9-pro-plus.jpg,"Color-changing design","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Aurora Green,4.0
+MF_10073,Realme C35,Realme,129.0,159.0,/images/devices/realme/realme-c35.jpg,"Ultra-budget option","4G;Fingerprint",64_GB,Glowing Black,3.8
+MF_10074,Motorola Edge 40 Pro,Motorola,899.0,999.0,/images/devices/motorola/motorola-edge-40-pro.jpg,"Premium flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Interstellar Black,4.3
+MF_10075,Motorola Edge 40,Motorola,599.0,649.0,/images/devices/motorola/motorola-edge-40.jpg,"Upper mid-range","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Lunar Blue,4.2
+MF_10076,Motorola G84,Motorola,349.0,399.0,/images/devices/motorola/motorola-g84.jpg,"Mid-range with OLED","5G;NFC;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Marshmallow Blue,4.1
+MF_10077,Motorola G54,Motorola,229.0,279.0,/images/devices/motorola/motorola-g54.jpg,"Budget-friendly 5G","5G;NFC;Fingerprint;Multiple Cameras",256_GB,Ambrosia,4.0
+MF_10078,Motorola G14,Motorola,149.0,179.0,/images/devices/motorola/motorola-g14.jpg,"Entry-level option","4G;Fingerprint;Multiple Cameras",128_GB,Sky Blue,3.9
+MF_10079,Motorola Razr 40,Motorola,899.0,999.0,/images/devices/motorola/motorola-razr-40.jpg,"Compact foldable","5G;eSIM;NFC;Wireless Charging;OLED;Fingerprint;Multiple Cameras",256_GB,Sage Green,4.1
+MF_10080,Motorola Edge 30,Motorola,449.0,549.0,/images/devices/motorola/motorola-edge-30.jpg,"Previous Edge model","5G;NFC;Wireless Charging;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Meteor Grey,4.1
+MF_10081,Motorola G73,Motorola,299.0,349.0,/images/devices/motorola/motorola-g73.jpg,"Reliable mid-range","5G;NFC;Fingerprint;Multiple Cameras",256_GB,Lucent White,4.0
+MF_10082,Motorola G23,Motorola,179.0,229.0,/images/devices/motorola/motorola-g23.jpg,"Budget smartphone","4G;NFC;Fingerprint;Multiple Cameras",128_GB,Matte Charcoal,3.9
+MF_10083,Honor Magic 5 Pro,Honor,899.0,999.0,/images/devices/honor/honor-magic-5-pro.jpg,"Premium flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Meadow Green,4.3
+MF_10084,Honor 90,Honor,599.0,649.0,/images/devices/honor/honor-90.jpg,"Portrait photography focus","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Peacock Blue,4.2
+MF_10085,Honor 70,Honor,449.0,499.0,/images/devices/honor/honor-70.jpg,"Mid-range flagship","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Emerald Green,4.1
+MF_10086,Honor X9a,Honor,349.0,399.0,/images/devices/honor/honor-x9a.jpg,"Durable design","5G;NFC;AMOLED;Fingerprint;Multiple Cameras",256_GB,Titanium Silver,4.0
+MF_10087,Honor X8a,Honor,249.0,299.0,/images/devices/honor/honor-x8a.jpg,"Budget-friendly option","4G;NFC;Fingerprint;Multiple Cameras",128_GB,Cyan Lake,3.9
+MF_10088,Honor Magic 4,Honor,699.0,799.0,/images/devices/honor/honor-magic-4.jpg,"Previous flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Black,4.2
+MF_10089,Honor 60,Honor,399.0,449.0,/images/devices/honor/honor-60.jpg,"Stylish mid-range","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Jade Green,4.0
+MF_10090,Honor X7a,Honor,199.0,249.0,/images/devices/honor/honor-x7a.jpg,"Entry-level smartphone","4G;Fingerprint;Multiple Cameras",128_GB,Ocean Blue,3.8
+MF_10091,Huawei P60 Pro,Huawei,999.0,1099.0,/images/devices/huawei/huawei-p60-pro.jpg,"Camera flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Rococo Pearl,4.2
+MF_10092,Huawei Mate 50 Pro,Huawei,899.0,999.0,/images/devices/huawei/huawei-mate-50-pro.jpg,"Premium business phone","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Silver,4.1
+MF_10093,Huawei Nova 11,Huawei,499.0,549.0,/images/devices/huawei/huawei-nova-11.jpg,"Selfie-focused phone","5G;NFC;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Green,4.0
+MF_10094,Huawei P50,Huawei,649.0,749.0,/images/devices/huawei/huawei-p50.jpg,"Previous P-series","4G;NFC;Wireless Charging;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Golden Black,4.0
+MF_10095,Huawei Nova 9,Huawei,399.0,449.0,/images/devices/huawei/huawei-nova-9.jpg,"Mid-range with good camera","4G;NFC;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Starry Blue,3.9
+MF_10096,Huawei Y70,Huawei,199.0,249.0,/images/devices/huawei/huawei-y70.jpg,"Budget smartphone","4G;Fingerprint;Multiple Cameras",128_GB,Midnight Black,3.8
+MF_10097,Sony Xperia 1 V,Sony,1299.0,1399.0,/images/devices/sony/sony-xperia-1-v.jpg,"Professional camera phone","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Black,4.2
+MF_10098,Sony Xperia 5 V,Sony,899.0,999.0,/images/devices/sony/sony-xperia-5-v.jpg,"Compact flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Blue,4.1
+MF_10099,Sony Xperia 10 V,Sony,449.0,499.0,/images/devices/sony/sony-xperia-10-v.jpg,"Mid-range Xperia","5G;NFC;IP68;OLED;Fingerprint;Multiple Cameras",128_GB,White,4.0
+MF_10100,Sony Xperia 1 IV,Sony,999.0,1199.0,/images/devices/sony/sony-xperia-1-iv.jpg,"Previous flagship","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,Purple,4.1
+MF_10101,Sony Xperia 5 IV,Sony,749.0,849.0,/images/devices/sony/sony-xperia-5-iv.jpg,"Compact previous gen","5G;NFC;Wireless Charging;IP68;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Green,4.0
+MF_10102,Nothing Phone (2),Nothing,679.0,729.0,/images/devices/nothing/nothing-phone-2.jpg,"Unique transparent design","5G;NFC;Wireless Charging;IP54;OLED;Fingerprint;Multiple Cameras;Fast Charging",256_GB,White,4.2
+MF_10103,Nothing Phone (1),Nothing,449.0,499.0,/images/devices/nothing/nothing-phone-1.jpg,"Original Nothing phone","5G;NFC;Wireless Charging;IP53;OLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Black,4.0
+MF_10104,Nothing Phone (2a),Nothing,349.0,399.0,/images/devices/nothing/nothing-phone-2a.jpg,"Budget Nothing phone","5G;NFC;AMOLED;Fingerprint;Multiple Cameras;Fast Charging",128_GB,Blue,3.9

@@ -5,5 +5,18 @@ id,name,price,duration,data,minutes,sms,features,popular
 <GENERATE_UUID>,MagentaMobil XL,84.95,monthly,unlimited,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;StreamOn Premium;Priority Support",False
 <GENERATE_UUID>,MagentaZuhause M,34.95,monthly,50Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
 <GENERATE_UUID>,MagentaZuhause L,39.95,monthly,100Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
-MF_17249,MagentaMobil Basic,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
-MF_17251,MagentaMobil Basic mit Smartphone,29.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17249,MagentaMobil Basic,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Travel & Surf;Mobilbox Pro",True
+MF_17249_NETFLIX,MagentaMobil Basic + Netflix,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Netflix",True
+MF_17249_DISNEY,MagentaMobil Basic + Disney+,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Disney+",False
+MF_17249_APPLETV,MagentaMobil Basic + Apple TV+,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Apple TV+",False
+MF_17249_PARAMOUNT,MagentaMobil Basic + Paramount+,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Paramount+",False
+MF_17249_SPOTIFY,MagentaMobil Basic + Spotify,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Spotify Premium",False
+MF_17251,MagentaMobil Basic mit Smartphone,34.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Smartphone Included",True
+MF_17251_NETFLIX,MagentaMobil Basic mit Smartphone + Netflix,34.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Smartphone Included;Netflix",False
+MF_17251_DISNEY,MagentaMobil Basic mit Smartphone + Disney+,34.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Smartphone Included;Disney+",False
+MF_17252,MagentaMobil Basic mit Top-Smartphone,44.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Top-Smartphone Included",False
+MF_17252_NETFLIX,MagentaMobil Basic mit Top-Smartphone + Netflix,44.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Top-Smartphone Included;Netflix",False
+MF_17253,MagentaMobil Basic mit Premium-Smartphone,54.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Premium-Smartphone Included",False
+MF_17253_NETFLIX,MagentaMobil Basic mit Premium-Smartphone + Netflix,54.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Premium-Smartphone Included;Netflix",False
+MF_17254,MagentaMobil Basic mit Premium-Plus-Smartphone,64.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Premium-Plus-Smartphone Included",False
+MF_17254_NETFLIX,MagentaMobil Basic mit Premium-Plus-Smartphone + Netflix,64.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Mobile Happy Hour;Premium-Plus-Smartphone Included;Netflix",False
