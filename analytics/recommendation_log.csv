@@ -1,0 +1,1 @@
+timestamp,event_id,session_id,user_id,query_type,query,device_count,plan_count,preference_match_score,top_device_id,top_plan_id

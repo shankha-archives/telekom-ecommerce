@@ -4,7 +4,9 @@ import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
-import { Mic, MicOff, Search, ShoppingCart, Star, Phone, Smartphone, Wifi, CheckCircle, X, MessageCircle, RotateCcw, Send, Minus } from 'lucide-react';
+import { Mic, MicOff, Search, ShoppingCart, Star, Phone, Smartphone, Wifi, CheckCircle, X, MessageCircle, RotateCcw } from 'lucide-react';
+import ModernChatInterface from './components/ModernChatInterface';
+import sessionSync from './utils/SessionSync';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
@@ -20,7 +22,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [currentView, setCurrentView] = useState('home');
   const [language, setLanguage] = useState('en');
-  const [sessionId] = useState(Math.random().toString(36).substring(7));
+  const [sessionId, setSessionId] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
   const [isChatExpanded, setIsChatExpanded] = useState(false);
   const [isChatMinimized, setIsChatMinimized] = useState(false);
@@ -31,8 +33,18 @@ function App() {
   const recognitionRef = useRef(null);
 
   useEffect(() => {
-    fetchAllData();
-    initializeSpeechRecognition();
+    async function initializeApp() {
+      // Initialize session sync
+      const sid = await sessionSync.initialize();
+      setSessionId(sid);
+      console.log(`Session initialized with ID: ${sid}`);
+      
+      // Fetch data and initialize speech
+      fetchAllData();
+      initializeSpeechRecognition();
+    }
+    
+    initializeApp();
     
     // Add click outside listener to close chat
     const handleClickOutside = (event) => {
@@ -47,6 +59,7 @@ function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      sessionSync.cleanup();
     };
   }, [isChatExpanded]);
 
@@ -181,14 +194,13 @@ function App() {
     setIsTyping(true);
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/voice-search`, {
+      const response = await fetch(`${BACKEND_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: transcript,
+          message: transcript,
           session_id: sessionId,
           language: language,
-          last_search_results: lastSearchResults,
           chat_history: chatHistory.slice(-10) // Send last 10 messages for better context
         })
       });
@@ -200,18 +212,17 @@ function App() {
         type: 'assistant',
         message: result.response,
         timestamp: new Date().toISOString(),
-        data: result.data,
-        action: result.action
+        follow_up_questions: result.follow_up_questions || []
       };
       
       setChatHistory(prev => [...prev, assistantMessage]);
       setIsTyping(false);
       
-      // Handle different actions
-      if (result.action === 'search' && result.data) {
+      // Handle recommendations
+      if (result.recommendations) {
         const searchResultsData = {
-          devices: result.data.recommended_devices || [],
-          plans: result.data.recommended_plans || [],
+          devices: result.recommendations.devices || [],
+          plans: result.recommendations.plans || [],
           recommendation: result.response
         };
         setLastSearchResults(searchResultsData);
@@ -226,49 +237,18 @@ function App() {
           };
           setChatHistory(prev => [...prev, resultsMessage]);
         }
-      } else if (result.action === 'add_to_cart' && result.data.cart_items) {
-        // Handle adding items to cart
-        result.data.cart_items.forEach(item => {
+      }
+      
+      // Handle cart actions
+      if (result.cart_items && result.cart_items.length > 0) {
+        result.cart_items.forEach(item => {
           addToCart(item, item.type);
         });
       }
       
       // Speak the response with smart content
       if ('speechSynthesis' in window && result.response) {
-        let speechText = result.response;
-        
-        // Smart speech for search results
-        if (result.action === 'search' && result.data) {
-          const devices = result.data.recommended_devices || [];
-          const plans = result.data.recommended_plans || [];
-          
-          speechText = "I found some great options for you. ";
-          
-          if (devices.length > 0) {
-            if (devices.length === 1) {
-              speechText += `I recommend the ${devices[0].name} for ${devices[0].price} euros. `;
-            } else {
-              speechText += `I have ${devices.length} device options including the ${devices[0].name}. `;
-            }
-          }
-          
-          if (plans.length > 0) {
-            if (plans.length === 1) {
-              speechText += `For plans, I suggest the ${plans[0].name} at ${plans[0].price} euros per month. `;
-            } else {
-              speechText += `I also found ${plans.length} plan options for you. `;
-            }
-          }
-          
-          speechText += "What would you like to know more about?";
-        }
-        
-        // Smart speech for cart actions
-        if (result.action === 'add_to_cart') {
-          speechText = result.response; // Keep the confirmation message
-        }
-        
-        const utterance = new SpeechSynthesisUtterance(speechText);
+        const utterance = new SpeechSynthesisUtterance(result.speech_text || result.response);
         utterance.lang = language === 'hi' ? 'hi-IN' : 'en-US';
         utterance.rate = 0.9;
         
@@ -339,7 +319,19 @@ function App() {
       });
 
       const results = await response.json();
-      setSearchResults(results);
+      
+      // If using enhanced API
+      if (results.recommendations) {
+        setSearchResults({
+          devices: results.recommendations.devices || [],
+          plans: results.recommendations.plans || [],
+          recommendation: results.response
+        });
+      } else {
+        // Legacy format
+        setSearchResults(results);
+      }
+      
       setCurrentView('search');
     } catch (error) {
       console.error('Search error:', error);
@@ -355,6 +347,14 @@ function App() {
       image: item.image || null
     };
     setCart([...cart, cartItem]);
+    
+    // Track conversion event
+    sessionSync.trackConversion({
+      item_id: item.id,
+      item_type: type,
+      item_data: item,
+      conversion_step: 'add_to_cart'
+    });
     
     // Add confirmation message to chat if chat is expanded
     if (isChatExpanded) {
@@ -725,97 +725,17 @@ function App() {
 
   const ExpandedChatInterface = () => {
     return (
-      <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-2xl shadow-2xl z-50 overflow-hidden">
-        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-magenta-600 to-magenta-700 text-white">
-          <div className="flex items-center gap-2">
-            <MessageCircle className="w-5 h-5" />
-            <span className="font-semibold">Your Telekom Assistant</span>
-            {isListening && (
-              <div className="flex items-center gap-1 ml-2">
-                <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                <span className="text-xs">Listening...</span>
-              </div>
-            )}
-          </div>
-          <div className="flex gap-1">
-            <Button
-              onClick={minimizeChat}
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
-              title="Minimize Chat"
-            >
-              <Minus className="w-4 h-4" />
-            </Button>
-            <Button
-              onClick={startOver}
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
-              title="Start Over"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </Button>
-            <Button
-              onClick={closeChatExpansion}
-              variant="ghost" 
-              size="sm"
-              className="text-white hover:bg-magenta-800 p-2 h-8 w-8"
-              title="Close Chat"
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-        
-        <div className="h-96 overflow-y-auto p-4 bg-gray-50 chat-scrollbar">
-          <div className="space-y-2">
-            {chatHistory.map((message, index) => (
-              <ChatMessage key={index} message={message} />
-            ))}
-            {isTyping && (
-              <div className="flex justify-start mb-4">
-                <div className="bg-white border px-4 py-3 rounded-2xl rounded-bl-md shadow-sm">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-magenta-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-magenta-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-magenta-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        <div className="border-t p-4 bg-white">
-          <div className="flex gap-2">
-            <Input
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleChatInput()}
-              placeholder={isListening ? "Listening..." : "Type your message..."}
-              className="flex-1 rounded-xl border-gray-300 focus:border-magenta-500 focus:ring-magenta-500"
-            />
-            <Button
-              onClick={handleChatInput}
-              size="sm"
-              className="bg-magenta-600 hover:bg-magenta-700 px-4 rounded-xl"
-              disabled={!chatInput.trim()}
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-            <Button
-              onClick={toggleVoiceSearch}
-              size="sm"
-              className={`px-4 rounded-xl transition-colors ${
-                isListening 
-                  ? 'bg-red-500 hover:bg-red-600 text-white' 
-                  : 'bg-gray-500 hover:bg-gray-600 text-white'
-              }`}
-            >
-              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </Button>
-          </div>
+      <div className="absolute top-full left-0 right-0 z-50 overflow-hidden">
+        <div className="w-full h-[500px]">
+          <ModernChatInterface
+            sessionId={sessionId}
+            apiBaseUrl={BACKEND_URL}
+            onMinimize={minimizeChat}
+            onClose={closeChatExpansion}
+            onRestart={startOver}
+            language={language}
+            initialMessages={chatHistory}
+          />
         </div>
       </div>
     );

@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context-Aware Chat System - Debugging Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.min.css">
+    <style>
+        :root {
+            --telekom-magenta: #e20074;
+            --telekom-magenta-dark: #be0060;
+            --telekom-gray: #f2f2f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 4.5rem;
+        }
+
+        .bg-telekom {
+            background-color: var(--telekom-magenta);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+        }
+
+        .card {
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 1.25rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--telekom-magenta);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .tab-content {
+            padding: 1.25rem;
+        }
+
+        .list-group-item {
+            border-left: none;
+            border-right: none;
+        }
+
+        .list-group-item:first-child {
+            border-top: none;
+        }
+
+        .badge-telekom {
+            background-color: var(--telekom-magenta);
+            color: white;
+        }
+
+        .table-sm td, .table-sm th {
+            padding: 0.5rem;
+        }
+
+        .json-view {
+            background: #f8f9fa;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Custom switch styles */
+        .form-switch .form-check-input {
+            background-color: #e9ecef;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--telekom-magenta);
+            border-color: var(--telekom-magenta);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .btn-telekom {
+            background-color: var(--telekom-magenta);
+            border-color: var(--telekom-magenta);
+            color: white;
+        }
+
+        .btn-telekom:hover {
+            background-color: var(--telekom-magenta-dark);
+            border-color: var(--telekom-magenta-dark);
+            color: white;
+        }
+
+        .session-card {
+            cursor: pointer;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .session-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendation-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            z-index: 10;
+        }
+
+        .event-timestamp {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+            border-width: 0.15em;
+        }
+
+        .preference-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
+            border-radius: 50rem;
+            background-color: #e9ecef;
+            color: #495057;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-telekom fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <span class="fs-4">T</span> Context-Aware Chat System - Debugging Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-bs-target="#overview-tab-pane">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#sessions-tab-pane">Sessions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#analytics-tab-pane">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#logs-tab-pane">Logs</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3">
+                            <span class="badge bg-light text-dark" id="server-status">
+                                <span class="spinner-border spinner-border-sm"></span>
+                                Checking server...
+                            </span>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-light btn-sm" id="refresh-btn">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="tab-content" id="dashboardTabContent">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview-tab-pane">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h1 class="h4 mb-3">System Overview</h1>
+                    </div>
+                </div>
+
+                <!-- Metrics Row -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card metric-card">
+                            <div class="metric-value" id="active-sessions-count">-</div>
+                            <div class="metric-label">Active Sessions</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card metric-card">
+                            <div class="metric-value" id="recommendations-count">-</div>
+                            <div class="metric-label">Recommendations Today</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card metric-card">
+                            <div class="metric-value" id="conversion-rate">-%</div>
+                            <div class="metric-label">Conversion Rate</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card metric-card">
+                            <div class="metric-value" id="avg-preference-score">-</div>
+                            <div class="metric-label">Avg. Preference Match</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <!-- Recent Activity -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Recent Activity</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary active" data-activity="all">All</button>
+                                    <button class="btn btn-outline-secondary" data-activity="recommendations">Recommendations</button>
+                                    <button class="btn btn-outline-secondary" data-activity="conversions">Conversions</button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="recent-activity">
+                                    <div class="list-group-item text-center">
+                                        <span class="spinner-border text-secondary"></span>
+                                        <p class="mb-0 text-secondary">Loading activity...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Health -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">System Health</div>
+                            <div class="card-body">
+                                <div id="system-health">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>API Server</span>
+                                        <span class="badge bg-success" id="api-status">Healthy</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Sessions</span>
+                                        <span class="badge bg-success" id="sessions-status">Healthy</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>LLM Integration</span>
+                                        <span class="badge bg-success" id="llm-status">Connected</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Analytics</span>
+                                        <span class="badge bg-success" id="analytics-status">Active</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h6 class="mb-2">Data Status</h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Devices</span>
+                                        <span id="devices-count">-</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Plans</span>
+                                        <span id="plans-count">-</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Last Updated</span>
+                                        <span id="data-updated">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-4">
+                            <div class="card-header">Quick Actions</div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-sm btn-telekom" id="clear-inactive-btn">
+                                        Clear Inactive Sessions
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" id="generate-report-btn">
+                                        Generate Analytics Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessions Tab -->
+            <div class="tab-pane fade" id="sessions-tab-pane">
+                <div class="row mb-3">
+                    <div class="col">
+                        <h1 class="h4">Active Sessions</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search sessions..." id="session-search">
+                            <button class="btn btn-sm btn-telekom" id="search-btn">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Session List</span>
+                                    <span class="badge bg-secondary" id="session-count">-</span>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush" id="session-list">
+                                <div class="list-group-item text-center">
+                                    <span class="spinner-border text-secondary"></span>
+                                    <p class="mb-0 text-secondary">Loading sessions...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <span id="selected-session-id">Session Details</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="session-details">
+                                    <p class="text-center text-secondary">Select a session to view details</p>
+                                </div>
+                                <div id="session-details-content" style="display: none;">
+                                    <!-- Session Metadata -->
+                                    <div class="mb-4">
+                                        <h5>Session Metadata</h5>
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <td width="30%"><strong>Session ID</strong></td>
+                                                <td id="detail-session-id"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Created</strong></td>
+                                                <td id="detail-created-at"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Last Active</strong></td>
+                                                <td id="detail-last-access"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Conversation Length</strong></td>
+                                                <td id="detail-conversation-count"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <!-- User Preferences -->
+                                    <div class="mb-4">
+                                        <h5>User Preferences</h5>
+                                        <div id="detail-preferences"></div>
+                                    </div>
+
+                                    <!-- Conversation History -->
+                                    <div class="mb-4">
+                                        <h5>Conversation History</h5>
+                                        <div id="detail-conversation" class="border rounded p-3 bg-light" style="max-height: 300px; overflow-y: auto;"></div>
+                                    </div>
+
+                                    <!-- Recently Viewed Items -->
+                                    <div>
+                                        <h5>Recently Viewed Items</h5>
+                                        <div id="detail-viewed-items"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="analytics-tab-pane">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h1 class="h4">Recommendation Analytics</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary active" data-period="7">7 Days</button>
+                            <button class="btn btn-sm btn-outline-secondary" data-period="30">30 Days</button>
+                            <button class="btn btn-sm btn-outline-secondary" data-period="90">90 Days</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Daily Recommendations</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="recommendations-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Conversion Rate</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="conversions-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Top Converted Devices</div>
+                            <div class="card-body">
+                                <div id="top-devices">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Top Converted Plans</div>
+                            <div class="card-body">
+                                <div id="top-plans">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">Recommendation Quality Analysis</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-4">
+                                            <h5 class="h6">Preference Match Score Distribution</h5>
+                                            <div class="chart-container">
+                                                <canvas id="match-score-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-4">
+                                            <h5 class="h6">Conversion Time Distribution</h5>
+                                            <div class="chart-container">
+                                                <canvas id="conversion-time-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div class="tab-pane fade" id="logs-tab-pane">
+                <div class="row mb-4">
+                    <div class="col">
+                        <h1 class="h4">System Logs</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary active" data-log-level="all">All</button>
+                            <button class="btn btn-sm btn-outline-secondary" data-log-level="error">Errors</button>
+                            <button class="btn btn-sm btn-outline-secondary" data-log-level="info">Info</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Recent Logs</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="auto-refresh">
+                                <label class="form-check-label" for="auto-refresh">Auto-refresh</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Level</th>
+                                        <th>Component</th>
+                                        <th>Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-entries">
+                                    <tr>
+                                        <td colspan="4" class="text-center py-3">
+                                            <span class="spinner-border text-secondary"></span>
+                                            <p class="mb-0 text-secondary">Loading logs...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Session Details -->
+    <div class="modal fade" id="sessionDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Session Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="json-view" id="session-json">
+                        <pre>{}</pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
+    <script>
+        // Configuration
+        const API_URL = window.location.protocol + '//' + window.location.host;
+        const AUTO_REFRESH_INTERVAL = 30000; // 30 seconds
+        let autoRefreshTimer = null;
+        let currentSessionId = null;
+        
+        // DOM Elements
+        const serverStatusEl = document.getElementById('server-status');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const sessionsListEl = document.getElementById('session-list');
+        const sessionDetailsEl = document.getElementById('session-details');
+        const sessionDetailsContentEl = document.getElementById('session-details-content');
+        
+        // Utility Functions
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleString();
+        }
+        
+        function formatTimeAgo(dateStr) {
+            if (!dateStr) return '-';
+            
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSec = Math.floor(diffMs / 1000);
+            
+            if (diffSec < 60) return `${diffSec} seconds ago`;
+            if (diffSec < 3600) return `${Math.floor(diffSec / 60)} minutes ago`;
+            if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} hours ago`;
+            return `${Math.floor(diffSec / 86400)} days ago`;
+        }
+        
+        function truncate(str, maxLength = 100) {
+            if (!str) return '';
+            if (str.length <= maxLength) return str;
+            return str.substring(0, maxLength) + '...';
+        }
+        
+        // API Functions
+        async function checkServerHealth() {
+            try {
+                const response = await fetch(`${API_URL}/api/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    serverStatusEl.innerHTML = '<span class="text-success">●</span> Server Online';
+                    serverStatusEl.className = 'badge bg-light text-dark';
+                    
+                    // Update health indicators
+                    document.getElementById('api-status').className = data.api === 'healthy' ? 'badge bg-success' : 'badge bg-danger';
+                    document.getElementById('sessions-status').className = data.sessions.status === 'healthy' ? 'badge bg-success' : 'badge bg-danger';
+                    document.getElementById('llm-status').className = data.openai === 'configured' ? 'badge bg-success' : 'badge bg-warning';
+                    document.getElementById('analytics-status').className = 'badge bg-success';
+                    
+                    // Update data counts
+                    if (data.data) {
+                        document.getElementById('devices-count').textContent = data.data.devices_count || '-';
+                        document.getElementById('plans-count').textContent = data.data.plans_count || '-';
+                    }
+                    
+                    document.getElementById('data-updated').textContent = formatTimeAgo(data.timestamp);
+                    
+                    return true;
+                } else {
+                    throw new Error('Server returned status ' + response.status);
+                }
+            } catch (error) {
+                console.error('Health check failed:', error);
+                serverStatusEl.innerHTML = '<span class="text-danger">●</span> Server Offline';
+                serverStatusEl.className = 'badge bg-light text-dark';
+                return false;
+            }
+        }
+        
+        async function loadActiveSessions() {
+            try {
+                // In a real implementation, this would call an API endpoint
+                // For demo purposes, we'll simulate some sessions
+                const sessions = [
+                    {
+                        session_id: 'session_1',
+                        created_at: new Date(Date.now() - 3600000).toISOString(),
+                        last_access: new Date(Date.now() - 60000).toISOString(),
+                        conversation_count: 12,
+                        preferences: { device_preferences: { brand: ['Samsung'] } }
+                    },
+                    {
+                        session_id: 'session_2',
+                        created_at: new Date(Date.now() - 7200000).toISOString(),
+                        last_access: new Date(Date.now() - 120000).toISOString(),
+                        conversation_count: 5,
+                        preferences: { plan_preferences: { data_needs: 'high' } }
+                    },
+                    {
+                        session_id: 'session_3',
+                        created_at: new Date(Date.now() - 1800000).toISOString(),
+                        last_access: new Date(Date.now() - 30000).toISOString(),
+                        conversation_count: 8,
+                        preferences: { device_preferences: { brand: ['Apple'] } }
+                    }
+                ];
+                
+                document.getElementById('active-sessions-count').textContent = sessions.length;
+                document.getElementById('session-count').textContent = sessions.length;
+                
+                // Clear and populate session list
+                sessionsListEl.innerHTML = '';
+                sessions.forEach(session => {
+                    const hasPref = session.preferences && 
+                        ((session.preferences.device_preferences && Object.keys(session.preferences.device_preferences).length > 0) ||
+                         (session.preferences.plan_preferences && Object.keys(session.preferences.plan_preferences).length > 0));
+                    
+                    const sessionItem = document.createElement('a');
+                    sessionItem.href = '#';
+                    sessionItem.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                    sessionItem.dataset.sessionId = session.session_id;
+                    
+                    sessionItem.innerHTML = `
+                        <div>
+                            <div><strong>${session.session_id}</strong></div>
+                            <div class="small text-muted">Last active: ${formatTimeAgo(session.last_access)}</div>
+                        </div>
+                        <div>
+                            <span class="badge bg-secondary">${session.conversation_count} msg</span>
+                            ${hasPref ? '<span class="badge badge-telekom ms-1">Prefs</span>' : ''}
+                        </div>
+                    `;
+                    
+                    sessionItem.addEventListener('click', () => {
+                        loadSessionDetails(session.session_id);
+                    });
+                    
+                    sessionsListEl.appendChild(sessionItem);
+                });
+                
+                return sessions;
+            } catch (error) {
+                console.error('Failed to load sessions:', error);
+                sessionsListEl.innerHTML = `
+                    <div class="list-group-item text-center text-danger">
+                        <p>Failed to load sessions</p>
+                    </div>
+                `;
+                return [];
+            }
+        }
+        
+        async function loadSessionDetails(sessionId) {
+            try {
+                currentSessionId = sessionId;
+                
+                // In a real implementation, this would call an API endpoint
+                // For demo purposes, we'll simulate session details
+                let sessionData;
+                
+                if (sessionId === 'session_1') {
+                    sessionData = {
+                        session_id: 'session_1',
+                        created_at: new Date(Date.now() - 3600000).toISOString(),
+                        last_access: new Date(Date.now() - 60000).toISOString(),
+                        conversation_count: 12,
+                        user_preferences: {
+                            device_preferences: {
+                                brand: ['Samsung'],
+                                price_range: { min: 500, max: 1200 },
+                                storage: ['256GB'],
+                                color: ['Black']
+                            },
+                            plan_preferences: {
+                                data_needs: 'high',
+                                international: true
+                            }
+                        },
+                        conversation_history: [
+                            { type: 'user', message: 'I need a new phone', timestamp: new Date(Date.now() - 3500000).toISOString() },
+                            { type: 'assistant', message: 'Great! I can help you find the perfect device. What brand do you prefer?', timestamp: new Date(Date.now() - 3490000).toISOString() },
+                            { type: 'user', message: 'I like Samsung phones', timestamp: new Date(Date.now() - 3480000).toISOString() },
+                            { type: 'assistant', message: 'Samsung makes excellent devices. What\'s your budget range?', timestamp: new Date(Date.now() - 3470000).toISOString() },
+                            { type: 'user', message: 'Around 1000 euros', timestamp: new Date(Date.now() - 3460000).toISOString() }
+                        ],
+                        recently_viewed: {
+                            devices: [
+                                { id: 'device_1', name: 'Samsung Galaxy S23', view_count: 3 },
+                                { id: 'device_2', name: 'Samsung Galaxy Z Flip', view_count: 1 }
+                            ],
+                            plans: [
+                                { id: 'plan_1', name: 'MagentaMobil L', view_count: 2 }
+                            ]
+                        }
+                    };
+                } else if (sessionId === 'session_2') {
+                    sessionData = {
+                        session_id: 'session_2',
+                        created_at: new Date(Date.now() - 7200000).toISOString(),
+                        last_access: new Date(Date.now() - 120000).toISOString(),
+                        conversation_count: 5,
+                        user_preferences: {
+                            plan_preferences: {
+                                data_needs: 'high',
+                                price_sensitivity: 'medium'
+                            }
+                        },
+                        conversation_history: [
+                            { type: 'user', message: 'I need a plan with lots of data', timestamp: new Date(Date.now() - 7100000).toISOString() },
+                            { type: 'assistant', message: 'I can help with that. How much data do you typically use per month?', timestamp: new Date(Date.now() - 7000000).toISOString() },
+                            { type: 'user', message: 'I stream a lot of videos, so probably a lot', timestamp: new Date(Date.now() - 6900000).toISOString() }
+                        ],
+                        recently_viewed: {
+                            plans: [
+                                { id: 'plan_2', name: 'MagentaMobil XL', view_count: 2 },
+                                { id: 'plan_3', name: 'MagentaMobil L', view_count: 1 }
+                            ],
+                            devices: []
+                        }
+                    };
+                } else {
+                    sessionData = {
+                        session_id: 'session_3',
+                        created_at: new Date(Date.now() - 1800000).toISOString(),
+                        last_access: new Date(Date.now() - 30000).toISOString(),
+                        conversation_count: 8,
+                        user_preferences: {
+                            device_preferences: {
+                                brand: ['Apple'],
+                                features: ['Good camera', 'Long battery life']
+                            },
+                            plan_preferences: {}
+                        },
+                        conversation_history: [
+                            { type: 'user', message: 'I want the latest iPhone', timestamp: new Date(Date.now() - 1700000).toISOString() },
+                            { type: 'assistant', message: 'Great choice! The latest models are iPhone 14, iPhone 14 Pro, and iPhone 14 Pro Max. Do you have a specific model in mind?', timestamp: new Date(Date.now() - 1600000).toISOString() },
+                            { type: 'user', message: 'I want the one with the best camera', timestamp: new Date(Date.now() - 1500000).toISOString() },
+                            { type: 'assistant', message: 'The iPhone 14 Pro and Pro Max have the best cameras with a 48MP main camera. Would you prefer the Pro or Pro Max?', timestamp: new Date(Date.now() - 1400000).toISOString() }
+                        ],
+                        recently_viewed: {
+                            devices: [
+                                { id: 'device_3', name: 'iPhone 14 Pro', view_count: 3 },
+                                { id: 'device_4', name: 'iPhone 14 Pro Max', view_count: 2 }
+                            ],
+                            plans: [
+                                { id: 'plan_4', name: 'MagentaMobil M', view_count: 1 }
+                            ]
+                        }
+                    };
+                }
+                
+                // Update selected session ID
+                document.getElementById('selected-session-id').textContent = `Session Details: ${sessionId}`;
+                
+                // Populate session details
+                document.getElementById('detail-session-id').textContent = sessionData.session_id;
+                document.getElementById('detail-created-at').textContent = formatDate(sessionData.created_at);
+                document.getElementById('detail-last-access').textContent = `${formatDate(sessionData.last_access)} (${formatTimeAgo(sessionData.last_access)})`;
+                document.getElementById('detail-conversation-count').textContent = sessionData.conversation_count;
+                
+                // Populate preferences
+                const prefsEl = document.getElementById('detail-preferences');
+                const devicePrefs = sessionData.user_preferences?.device_preferences || {};
+                const planPrefs = sessionData.user_preferences?.plan_preferences || {};
+                
+                if (Object.keys(devicePrefs).length === 0 && Object.keys(planPrefs).length === 0) {
+                    prefsEl.innerHTML = '<p class="text-muted">No preferences set</p>';
+                } else {
+                    let prefsHtml = '<div class="row">';
+                    
+                    if (Object.keys(devicePrefs).length > 0) {
+                        prefsHtml += '<div class="col-md-6"><h6>Device Preferences</h6><ul class="list-unstyled mb-0">';
+                        for (const [key, value] of Object.entries(devicePrefs)) {
+                            if (key === 'brand' && Array.isArray(value)) {
+                                prefsHtml += `<li><strong>Brand:</strong> ${value.join(', ')}</li>`;
+                            } else if (key === 'price_range' && typeof value === 'object') {
+                                prefsHtml += `<li><strong>Price Range:</strong> €${value.min} - €${value.max}</li>`;
+                            } else if (Array.isArray(value)) {
+                                prefsHtml += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value.join(', ')}</li>`;
+                            } else {
+                                prefsHtml += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                            }
+                        }
+                        prefsHtml += '</ul></div>';
+                    }
+                    
+                    if (Object.keys(planPrefs).length > 0) {
+                        prefsHtml += '<div class="col-md-6"><h6>Plan Preferences</h6><ul class="list-unstyled mb-0">';
+                        for (const [key, value] of Object.entries(planPrefs)) {
+                            if (key === 'data_needs') {
+                                const dataMap = {
+                                    'low': 'Basic data (2-5GB)',
+                                    'medium': 'Moderate data (10-20GB)',
+                                    'high': 'Heavy data (Unlimited)'
+                                };
+                                prefsHtml += `<li><strong>Data Needs:</strong> ${dataMap[value] || value}</li>`;
+                            } else if (typeof value === 'boolean') {
+                                prefsHtml += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value ? 'Yes' : 'No'}</li>`;
+                            } else {
+                                prefsHtml += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                            }
+                        }
+                        prefsHtml += '</ul></div>';
+                    }
+                    
+                    prefsHtml += '</div>';
+                    prefsEl.innerHTML = prefsHtml;
+                }
+                
+                // Populate conversation history
+                const convEl = document.getElementById('detail-conversation');
+                if (sessionData.conversation_history && sessionData.conversation_history.length > 0) {
+                    let convHtml = '';
+                    sessionData.conversation_history.forEach(msg => {
+                        const messageClass = msg.type === 'user' ? 'bg-light text-dark' : 'bg-primary text-white';
+                        const messageAlign = msg.type === 'user' ? 'text-end' : 'text-start';
+                        const messageSender = msg.type === 'user' ? 'User' : 'Assistant';
+                        
+                        convHtml += `
+                            <div class="mb-2 ${messageAlign}">
+                                <small class="text-muted">${messageSender} (${formatDate(msg.timestamp)})</small>
+                                <div class="d-inline-block rounded p-2 ${messageClass}">
+                                    ${msg.message}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    convEl.innerHTML = convHtml;
+                } else {
+                    convEl.innerHTML = '<p class="text-muted">No conversation history</p>';
+                }
+                
+                // Populate recently viewed items
+                const viewedEl = document.getElementById('detail-viewed-items');
+                const devices = sessionData.recently_viewed?.devices || [];
+                const plans = sessionData.recently_viewed?.plans || [];
+                
+                if (devices.length === 0 && plans.length === 0) {
+                    viewedEl.innerHTML = '<p class="text-muted">No recently viewed items</p>';
+                } else {
+                    let viewedHtml = '<div class="row">';
+                    
+                    if (devices.length > 0) {
+                        viewedHtml += '<div class="col-md-6"><h6>Devices</h6><ul class="list-group list-group-flush">';
+                        devices.forEach(device => {
+                            viewedHtml += `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>${device.name}</span>
+                                    <span class="badge bg-secondary">${device.view_count} views</span>
+                                </li>
+                            `;
+                        });
+                        viewedHtml += '</ul></div>';
+                    }
+                    
+                    if (plans.length > 0) {
+                        viewedHtml += '<div class="col-md-6"><h6>Plans</h6><ul class="list-group list-group-flush">';
+                        plans.forEach(plan => {
+                            viewedHtml += `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>${plan.name}</span>
+                                    <span class="badge bg-secondary">${plan.view_count} views</span>
+                                </li>
+                            `;
+                        });
+                        viewedHtml += '</ul></div>';
+                    }
+                    
+                    viewedHtml += '</div>';
+                    viewedEl.innerHTML = viewedHtml;
+                }
+                
+                // Show session details content
+                sessionDetailsEl.style.display = 'none';
+                sessionDetailsContentEl.style.display = 'block';
+                
+                return sessionData;
+            } catch (error) {
+                console.error('Failed to load session details:', error);
+                sessionDetailsEl.innerHTML = `
+                    <div class="alert alert-danger">
+                        <p>Failed to load session details</p>
+                    </div>
+                `;
+                sessionDetailsEl.style.display = 'block';
+                sessionDetailsContentEl.style.display = 'none';
+                return null;
+            }
+        }
+        
+        async function loadRecommendationAnalytics(days = 7) {
+            try {
+                // In a real implementation, this would call an API endpoint
+                // For demo purposes, we'll simulate analytics data
+                const data = {
+                    total_recommendations: 524,
+                    total_conversions: 89,
+                    conversion_rate: 16.98,
+                    avg_preference_match: 0.72,
+                    avg_time_to_conversion: 67.3,
+                    recommendations_by_day: {
+                        '2023-06-01': 65,
+                        '2023-06-02': 72,
+                        '2023-06-03': 58,
+                        '2023-06-04': 86,
+                        '2023-06-05': 79,
+                        '2023-06-06': 94,
+                        '2023-06-07': 70
+                    },
+                    conversions_by_day: {
+                        '2023-06-01': 9,
+                        '2023-06-02': 12,
+                        '2023-06-03': 8,
+                        '2023-06-04': 17,
+                        '2023-06-05': 13,
+                        '2023-06-06': 18,
+                        '2023-06-07': 12
+                    },
+                    top_device_conversions: [
+                        ['Samsung Galaxy S23', 23],
+                        ['iPhone 14 Pro', 18],
+                        ['Google Pixel 7', 14],
+                        ['Samsung Galaxy Z Flip', 11],
+                        ['iPhone 14', 8]
+                    ],
+                    top_plan_conversions: [
+                        ['MagentaMobil L', 19],
+                        ['MagentaMobil M', 17],
+                        ['MagentaMobil XL', 12],
+                        ['MagentaMobil S', 9],
+                        ['Family Plan L', 6]
+                    ],
+                    avg_preferences_count: 3.2
+                };
+                
+                // Update metrics
+                document.getElementById('recommendations-count').textContent = data.total_recommendations;
+                document.getElementById('conversion-rate').textContent = data.conversion_rate.toFixed(1) + '%';
+                document.getElementById('avg-preference-score').textContent = (data.avg_preference_match * 100).toFixed(0) + '%';
+                
+                // Update top devices
+                const topDevicesEl = document.getElementById('top-devices');
+                let topDevicesHtml = '<div class="table-responsive"><table class="table table-sm">';
+                topDevicesHtml += '<thead><tr><th>Device</th><th>Conversions</th><th>Rate</th></tr></thead><tbody>';
+                
+                data.top_device_conversions.forEach(([device, count]) => {
+                    const percentage = ((count / data.total_conversions) * 100).toFixed(1);
+                    topDevicesHtml += `
+                        <tr>
+                            <td>${device}</td>
+                            <td>${count}</td>
+                            <td>${percentage}%</td>
+                        </tr>
+                    `;
+                });
+                
+                topDevicesHtml += '</tbody></table></div>';
+                topDevicesEl.innerHTML = topDevicesHtml;
+                
+                // Update top plans
+                const topPlansEl = document.getElementById('top-plans');
+                let topPlansHtml = '<div class="table-responsive"><table class="table table-sm">';
+                topPlansHtml += '<thead><tr><th>Plan</th><th>Conversions</th><th>Rate</th></tr></thead><tbody>';
+                
+                data.top_plan_conversions.forEach(([plan, count]) => {
+                    const percentage = ((count / data.total_conversions) * 100).toFixed(1);
+                    topPlansHtml += `
+                        <tr>
+                            <td>${plan}</td>
+                            <td>${count}</td>
+                            <td>${percentage}%</td>
+                        </tr>
+                    `;
+                });
+                
+                topPlansHtml += '</tbody></table></div>';
+                topPlansEl.innerHTML = topPlansHtml;
+                
+                // Update charts
+                updateCharts(data);
+                
+                return data;
+            } catch (error) {
+                console.error('Failed to load analytics:', error);
+                return null;
+            }
+        }
+        
+        async function loadRecentActivity() {
+            try {
+                // In a real implementation, this would call an API endpoint
+                // For demo purposes, we'll simulate activity data
+                const activities = [
+                    {
+                        type: 'recommendation',
+                        session_id: 'session_1',
+                        timestamp: new Date(Date.now() - 600000).toISOString(),
+                        query: 'I need a Samsung phone with good battery life',
+                        query_type: 'chat',
+                        device_count: 3,
+                        plan_count: 2
+                    },
+                    {
+                        type: 'conversion',
+                        session_id: 'session_3',
+                        timestamp: new Date(Date.now() - 900000).toISOString(),
+                        item_name: 'iPhone 14 Pro',
+                        item_type: 'device',
+                        conversion_step: 'add_to_cart'
+                    },
+                    {
+                        type: 'recommendation',
+                        session_id: 'session_2',
+                        timestamp: new Date(Date.now() - 1800000).toISOString(),
+                        query: 'Show me unlimited data plans',
+                        query_type: 'search',
+                        device_count: 0,
+                        plan_count: 4
+                    },
+                    {
+                        type: 'conversion',
+                        session_id: 'session_1',
+                        timestamp: new Date(Date.now() - 3600000).toISOString(),
+                        item_name: 'MagentaMobil L',
+                        item_type: 'plan',
+                        conversion_step: 'add_to_cart'
+                    }
+                ];
+                
+                const activityEl = document.getElementById('recent-activity');
+                activityEl.innerHTML = '';
+                
+                activities.forEach(activity => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'list-group-item';
+                    
+                    if (activity.type === 'recommendation') {
+                        activityItem.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="badge bg-primary me-2">Recommendation</span>
+                                        <span class="badge bg-secondary me-1">${activity.query_type}</span>
+                                    </div>
+                                    <div class="mb-1"><strong>Query:</strong> ${truncate(activity.query)}</div>
+                                    <div class="mb-1">
+                                        <strong>Results:</strong> 
+                                        ${activity.device_count} devices, 
+                                        ${activity.plan_count} plans
+                                    </div>
+                                    <div class="small text-muted">Session: ${activity.session_id}</div>
+                                </div>
+                                <span class="event-timestamp">${formatTimeAgo(activity.timestamp)}</span>
+                            </div>
+                        `;
+                    } else if (activity.type === 'conversion') {
+                        activityItem.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="badge bg-success me-2">Conversion</span>
+                                        <span class="badge bg-secondary me-1">${activity.conversion_step}</span>
+                                    </div>
+                                    <div class="mb-1">
+                                        <strong>${activity.item_type === 'device' ? 'Device' : 'Plan'}:</strong> 
+                                        ${activity.item_name}
+                                    </div>
+                                    <div class="small text-muted">Session: ${activity.session_id}</div>
+                                </div>
+                                <span class="event-timestamp">${formatTimeAgo(activity.timestamp)}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    activityEl.appendChild(activityItem);
+                });
+                
+                return activities;
+            } catch (error) {
+                console.error('Failed to load activity:', error);
+                return [];
+            }
+        }
+        
+        async function loadSystemLogs() {
+            try {
+                // In a real implementation, this would call an API endpoint
+                // For demo purposes, we'll simulate log data
+                const logs = [
+                    {
+                        timestamp: new Date(Date.now() - 60000).toISOString(),
+                        level: 'INFO',
+                        component: 'API',
+                        message: 'Request received: POST /api/chat'
+                    },
+                    {
+                        timestamp: new Date(Date.now() - 65000).toISOString(),
+                        level: 'INFO',
+                        component: 'SessionManager',
+                        message: 'Session created: session_4'
+                    },
+                    {
+                        timestamp: new Date(Date.now() - 120000).toISOString(),
+                        level: 'ERROR',
+                        component: 'RecommendationEngine',
+                        message: 'Failed to generate recommendations: TypeError: Cannot read property \'brand\' of undefined'
+                    },
+                    {
+                        timestamp: new Date(Date.now() - 180000).toISOString(),
+                        level: 'INFO',
+                        component: 'API',
+                        message: 'Request received: GET /api/session/session_1'
+                    },
+                    {
+                        timestamp: new Date(Date.now() - 240000).toISOString(),
+                        level: 'WARNING',
+                        component: 'PreferenceExtractor',
+                        message: 'Could not extract preferences from conversation: Ambiguous user input'
+                    }
+                ];
+                
+                const logsEl = document.getElementById('log-entries');
+                logsEl.innerHTML = '';
+                
+                logs.forEach(log => {
+                    const row = document.createElement('tr');
+                    
+                    if (log.level === 'ERROR') {
+                        row.className = 'table-danger';
+                    } else if (log.level === 'WARNING') {
+                        row.className = 'table-warning';
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${formatDate(log.timestamp)}</td>
+                        <td><span class="badge ${log.level === 'ERROR' ? 'bg-danger' : log.level === 'WARNING' ? 'bg-warning text-dark' : 'bg-info text-dark'}">${log.level}</span></td>
+                        <td>${log.component}</td>
+                        <td>${log.message}</td>
+                    `;
+                    
+                    logsEl.appendChild(row);
+                });
+                
+                return logs;
+            } catch (error) {
+                console.error('Failed to load logs:', error);
+                return [];
+            }
+        }
+        
+        // Chart Functions
+        let recommendationsChart, conversionsChart, matchScoreChart, conversionTimeChart;
+        
+        function initializeCharts() {
+            // Recommendations Chart
+            const recCtx = document.getElementById('recommendations-chart').getContext('2d');
+            recommendationsChart = new Chart(recCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Recommendations',
+                            data: [],
+                            borderColor: '#e20074',
+                            backgroundColor: 'rgba(226, 0, 116, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Conversions Chart
+            const convCtx = document.getElementById('conversions-chart').getContext('2d');
+            conversionsChart = new Chart(convCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Recommendations',
+                            data: [],
+                            backgroundColor: 'rgba(226, 0, 116, 0.3)',
+                            borderColor: 'rgba(226, 0, 116, 0.7)',
+                            borderWidth: 1,
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: 'Conversions',
+                            data: [],
+                            backgroundColor: 'rgba(0, 150, 64, 0.3)',
+                            borderColor: 'rgba(0, 150, 64, 0.7)',
+                            borderWidth: 1,
+                            stack: 'Stack 0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Match Score Chart
+            const matchCtx = document.getElementById('match-score-chart').getContext('2d');
+            matchScoreChart = new Chart(matchCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Match (>75%)', 'Medium Match (50-75%)', 'Low Match (<50%)'],
+                    datasets: [
+                        {
+                            data: [65, 25, 10],
+                            backgroundColor: [
+                                'rgba(0, 150, 64, 0.7)',
+                                'rgba(255, 193, 7, 0.7)',
+                                'rgba(220, 53, 69, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(0, 150, 64, 1)',
+                                'rgba(255, 193, 7, 1)',
+                                'rgba(220, 53, 69, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Conversion Time Chart
+            const timeCtx = document.getElementById('conversion-time-chart').getContext('2d');
+            conversionTimeChart = new Chart(timeCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['<30s', '30s-2m', '2m-5m', '5m-10m', '>10m'],
+                    datasets: [
+                        {
+                            label: 'Conversions by Time',
+                            data: [35, 25, 20, 12, 8],
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Conversions'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateCharts(data) {
+            // Sort dates
+            const dates = Object.keys(data.recommendations_by_day).sort();
+            const recValues = dates.map(date => data.recommendations_by_day[date]);
+            const convValues = dates.map(date => data.conversions_by_day[date] || 0);
+            
+            // Update recommendations chart
+            recommendationsChart.data.labels = dates;
+            recommendationsChart.data.datasets[0].data = recValues;
+            recommendationsChart.update();
+            
+            // Update conversions chart
+            conversionsChart.data.labels = dates;
+            conversionsChart.data.datasets[0].data = recValues;
+            conversionsChart.data.datasets[1].data = convValues;
+            conversionsChart.update();
+        }
+        
+        // Navigation Functions
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Deactivate all links and tabs
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    tabPanes.forEach(p => {
+                        p.classList.remove('show');
+                        p.classList.remove('active');
+                    });
+                    
+                    // Activate clicked link and corresponding tab
+                    link.classList.add('active');
+                    const tabId = link.dataset.bsTarget;
+                    const tabPane = document.querySelector(tabId);
+                    
+                    if (tabPane) {
+                        tabPane.classList.add('show');
+                        tabPane.classList.add('active');
+                        
+                        // Load tab-specific data
+                        if (tabId === '#sessions-tab-pane') {
+                            loadActiveSessions();
+                        } else if (tabId === '#analytics-tab-pane') {
+                            loadRecommendationAnalytics();
+                        } else if (tabId === '#logs-tab-pane') {
+                            loadSystemLogs();
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Main Initialization
+        async function initialize() {
+            // Setup event listeners
+            setupNavigation();
+            
+            refreshBtn.addEventListener('click', async () => {
+                refreshData();
+            });
+            
+            document.getElementById('auto-refresh').addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    startAutoRefresh();
+                } else {
+                    stopAutoRefresh();
+                }
+            });
+            
+            // Check server health
+            await checkServerHealth();
+            
+            // Load initial data
+            await loadActiveSessions();
+            await loadRecentActivity();
+            
+            // Initialize charts
+            initializeCharts();
+            
+            // Load analytics data
+            await loadRecommendationAnalytics();
+        }
+        
+        async function refreshData() {
+            await checkServerHealth();
+            await loadActiveSessions();
+            await loadRecentActivity();
+            
+            // Refresh current tab data
+            const activeTab = document.querySelector('.tab-pane.active');
+            if (activeTab) {
+                if (activeTab.id === 'sessions-tab-pane') {
+                    if (currentSessionId) {
+                        await loadSessionDetails(currentSessionId);
+                    }
+                } else if (activeTab.id === 'analytics-tab-pane') {
+                    await loadRecommendationAnalytics();
+                } else if (activeTab.id === 'logs-tab-pane') {
+                    await loadSystemLogs();
+                }
+            }
+        }
+        
+        function startAutoRefresh() {
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+            }
+            
+            autoRefreshTimer = setInterval(() => {
+                refreshData();
+            }, AUTO_REFRESH_INTERVAL);
+        }
+        
+        function stopAutoRefresh() {
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+                autoRefreshTimer = null;
+            }
+        }
+        
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>

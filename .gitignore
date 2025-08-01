@@ -3,3 +3,9 @@
 /backend/.env.example
 /backend/.venv/
 /backend/venv/
+
+# Environment and secret files
+.env
+*.env
+.env.*
+

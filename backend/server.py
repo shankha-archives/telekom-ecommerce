@@ -1,13 +1,22 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 import os
 import uuid
 import asyncio
 import json
+from datetime import datetime
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
+
+# Import our new modules
+import session_manager
+import preference_extractor
+import recommendation_engine
+import user_profile_utils
+import llm_recommendation_logger
+import enhanced_api
 
 load_dotenv()
 
@@ -86,14 +95,15 @@ class VoiceRequest(BaseModel):
     last_search_results: Optional[Dict] = None
     chat_history: Optional[List[Dict]] = None
 
+class PreferenceUpdateRequest(BaseModel):
+    preferences: Dict[str, Any]
+
 # In-memory storage for devices and plans
 devices_store = []
 plans_store = []
 
 # Sample data
 import csv
-import user_profile_utils
-import llm_recommendation_logger
 
 def load_devices_from_csv(csv_path):
     devices = []
@@ -161,6 +171,10 @@ async def startup_event():
         else:
             print("⚠️  OpenAI API key not configured - AI features will be disabled")
         
+        # Setup enhanced API routes
+        await enhanced_api.setup_enhanced_routes(app, devices_store, plans_store)
+        print("✅ Enhanced API routes configured")
+        
         print("✅ Application initialized successfully")
     except Exception as e:
         print(f"❌ Application initialization error: {e}")
@@ -174,11 +188,16 @@ async def get_devices():
     return devices
 
 @app.get("/api/devices/{device_id}")
-async def get_device(device_id: str):
+async def get_device(device_id: str, session_id: Optional[str] = None):
     """Get specific device"""
     device = find_by_id(devices_store, device_id)
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
+    
+    # Update session with viewed item if session_id is provided
+    if session_id:
+        session_manager.update_viewed_item(session_id, 'devices', device_id, device)
+    
     return device
 
 @app.get("/api/plans")
@@ -189,187 +208,211 @@ async def get_plans():
     return plans
 
 @app.get("/api/plans/{plan_id}")
-async def get_plan(plan_id: str):
+async def get_plan(plan_id: str, session_id: Optional[str] = None):
     """Get specific plan"""
     plan = find_by_id(plans_store, plan_id)
     if not plan:
         raise HTTPException(status_code=404, detail="Plan not found")
+    
+    # Update session with viewed item if session_id is provided
+    if session_id:
+        session_manager.update_viewed_item(session_id, 'plans', plan_id, plan)
+    
     return plan
 
 @app.post("/api/search")
 async def smart_search(request: SearchRequest):
-    # Load user profile if user_id is provided
-    user_profile = None
-    if hasattr(request, 'user_id') and request.user_id:
-        user_profile = user_profile_utils.get_user_profile(request.user_id)
-    # Add user profile to context for logging
-    """Smart LLM-powered search for devices and plans"""
+    """Smart LLM-powered search for devices and plans with contextual awareness"""
     try:
+        print(f"DEBUG: Smart search request: {request.query}")
+        
+        # Load user profile if user_id is provided
+        user_profile = None
+        if hasattr(request, 'user_id') and request.user_id:
+            user_profile = user_profile_utils.get_user_profile(request.user_id)
+        
+        # Get or create session
+        print(f"DEBUG: Getting/creating session for ID: {request.session_id}")
+        session_id, session_data = session_manager.get_or_create_session(request.session_id)
+        print(f"DEBUG: Session obtained with ID: {session_id}")
+        
+        # Add search query to session
+        session_manager.add_search_query(session_id, request.query)
+        
+        # Get all devices and plans
+        print(f"DEBUG: Loading devices and plans")
+        devices = devices_store
+        plans = plans_store
+        print(f"DEBUG: Loaded {len(devices)} devices and {len(plans)} plans")
+        
         if not OPENAI_API_KEY:
             # Fallback to simple text search if no API key
             query_lower = request.query.lower()
             filtered_devices = [
-                d for d in devices_store 
+                d for d in devices 
                 if query_lower in d["name"].lower() or 
                    query_lower in d["brand"].lower() or 
                    query_lower in d["description"].lower()
             ]
             
             filtered_plans = [
-                p for p in plans_store 
+                p for p in plans 
                 if query_lower in p["name"].lower() or 
                    any(query_lower in feature.lower() for feature in p["features"])
             ]
             
             return {
-                "devices": filtered_devices,
-                "plans": filtered_plans,
-                "recommendation": f"Found {len(filtered_devices)} devices and {len(filtered_plans)} plans matching '{request.query}'"
-            }
-        
-        # Get all devices and plans from in-memory storage
-        devices = devices_store
-        plans = plans_store
-        
-        # Create LLM chat instance
-        session_id = request.session_id or str(uuid.uuid4())
-        
-        if not OPENAI_API_KEY:
-            # Fallback search without AI
-            filtered_devices = [d for d in devices if request.query.lower() in d["name"].lower() or 
-                              request.query.lower() in d["brand"].lower()]
-            filtered_plans = [p for p in plans if request.query.lower() in p["name"].lower()]
-            
-            return {
-                "devices": filtered_devices[:3],
-                "plans": filtered_plans[:2],
-                "recommendation": f"Here are search results for '{request.query}'",
+                "devices": filtered_devices[:5],
+                "plans": filtered_plans[:3],
+                "recommendation": f"Found {len(filtered_devices)} devices and {len(filtered_plans)} plans matching '{request.query}'",
                 "session_id": session_id
             }
         
-        # Create system message for OpenAI
-        system_message = """You are a smart assistant for Telekom ecommerce. Help users find the best devices and plans based on their needs. 
-
-Available devices and plans:
-{devices_and_plans}
-
-When users ask about devices or plans, analyze their query and recommend the most suitable options. 
-Always respond in JSON format with:
-{{
-    "recommended_devices": [list of device IDs that match the query],
-    "recommended_plans": [list of plan IDs that match the query],
-    "explanation": "Brief explanation of why these recommendations fit the user's needs",
-    "follow_up_questions": [list of helpful follow-up questions]
-}}
-
-Focus on understanding user intent (budget, usage patterns, preferences) and matching them with appropriate products.""".format(
-            devices_and_plans=f"DEVICES: {devices}\n\nPLANS: {plans}"
-        )
-        
-        # Send user query to OpenAI
-        client = get_openai_client()
-        if not client:
-            # Fallback search without AI
-            filtered_devices = [d for d in devices if request.query.lower() in d["name"].lower() or 
-                              request.query.lower() in d["brand"].lower()]
-            filtered_plans = [p for p in plans if request.query.lower() in p["name"].lower()]
-            
-            return {
-                "devices": filtered_devices[:3],
-                "plans": filtered_plans[:2],
-                "recommendation": f"Here are search results for '{request.query}'",
-                "session_id": session_id
-            }
-            
-        response = await client.chat.completions.create(
-            model=LLM_MODEL,
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": request.query}
-            ],
-            temperature=0.7,
-            max_tokens=1000
-        )
-        
-        # Parse LLM response (assuming it returns JSON)
-        import json
+        # Use our recommendation engine to generate weighted recommendations
+        print(f"DEBUG: Calling recommendation engine")
         try:
-            response_content = response.choices[0].message.content
-            llm_result = json.loads(response_content)
-            
-            # Get recommended devices and plans
-            recommended_devices = []
-            for device_id in llm_result.get("recommended_devices", []):
-                device = find_by_id(devices, device_id)
-                if device:
-                    recommended_devices.append(device)
-            
-            recommended_plans = []
-            for plan_id in llm_result.get("recommended_plans", []):
-                plan = find_by_id(plans, plan_id)
-                if plan:
-                    recommended_plans.append(plan)
-            
-            # Log LLM recommendation with user profile and context
-            llm_recommendation_logger.log_llm_recommendation(
-                user_id=request.user_id if hasattr(request, 'user_id') else None,
-                user_profile=user_profile,
-                llm_input={"query": request.query},
-                llm_response=llm_result,
-                context={"devices": devices, "plans": plans, "user_profile": user_profile}
+            recommendations = recommendation_engine.generate_weighted_recommendations(
+                session_data, 
+                devices, 
+                plans, 
+                request.query
             )
-            return {
-                "devices": recommended_devices,
-                "plans": recommended_plans,
-                "recommendation": llm_result.get("explanation", "Here are my recommendations based on your query."),
-                "follow_up_questions": llm_result.get("follow_up_questions", []),
-                "session_id": session_id
+            print(f"DEBUG: Recommendation engine returned successfully")
+        except Exception as e:
+            print(f"DEBUG: Error in recommendation engine: {str(e)}")
+            import traceback
+            print(f"DEBUG: Traceback: {traceback.format_exc()}")
+            raise
+        
+        # Extract recommended devices and plans
+        recommended_devices = recommendations.get('devices', [])
+        recommended_plans = recommendations.get('plans', [])
+        device_explanations = recommendations.get('device_explanations', {})
+        plan_explanations = recommendations.get('plan_explanations', {})
+        print(f"DEBUG: Got {len(recommended_devices)} devices and {len(recommended_plans)} plans")
+        
+        # Generate recommendation summary
+        summary = await recommendation_engine.generate_recommendation_summary(
+            recommendations,
+            session_data.get('user_preferences', {}),
+            request.query
+        )
+        
+        # Update viewed items in session for all recommended items
+        for device in recommended_devices:
+            session_manager.update_viewed_item(session_id, 'devices', device['id'], device)
+        
+        for plan in recommended_plans:
+            session_manager.update_viewed_item(session_id, 'plans', plan['id'], plan)
+        
+        # Try to extract preferences from the query
+        if len(session_data['conversation_history']) % 3 == 0:  # Every 3 interactions to avoid excessive LLM calls
+            # Add the search query to conversation history as a user message
+            session_manager.add_to_conversation_history(session_id, 'user', request.query)
+            
+            # Extract or refine preferences
+            if not session_data.get('user_preferences') or len(session_data['user_preferences']) == 0:
+                new_preferences = await preference_extractor.extract_user_preferences(
+                    session_data['conversation_history']
+                )
+            else:
+                new_preferences = await preference_extractor.refine_preferences(
+                    session_data['user_preferences'],
+                    session_data['conversation_history']
+                )
+            
+            if new_preferences:
+                session_manager.update_user_preferences(session_id, new_preferences)
+        
+        # Log recommendation
+        llm_recommendation_logger.log_llm_recommendation(
+            user_id=request.user_id if hasattr(request, 'user_id') else None,
+            user_profile=user_profile,
+            llm_input={"query": request.query},
+            llm_response={
+                "recommended_devices": [d['id'] for d in recommended_devices],
+                "recommended_plans": [p['id'] for p in recommended_plans],
+                "explanation": summary
+            },
+            context={
+                "devices": devices, 
+                "plans": plans, 
+                "user_profile": user_profile,
+                "session_id": session_id,
+                "user_preferences": session_data.get('user_preferences', {})
             }
-        except json.JSONDecodeError:
-            # If LLM doesn't return valid JSON, fall back to text response
-            return {
-                "devices": devices[:3],  # Return first 3 devices as fallback
-                "plans": plans[:2],      # Return first 2 plans as fallback
-                "recommendation": response_content,
-                "session_id": session_id
-            }
+        )
+        
+        # Generate follow-up questions based on context and recommendations
+        follow_up_questions = []
+        if recommended_devices and not recommended_plans:
+            follow_up_questions.append("What kind of mobile plan would work with this device?")
+        if recommended_plans and not recommended_devices:
+            follow_up_questions.append("Do you have any device recommendations to go with this plan?")
+        if recommended_devices and recommended_plans:
+            follow_up_questions.append("Would you like to compare these options?")
+        
+        return {
+            "devices": recommended_devices,
+            "plans": recommended_plans,
+            "device_explanations": device_explanations,
+            "plan_explanations": plan_explanations,
+            "recommendation": summary,
+            "follow_up_questions": follow_up_questions,
+            "session_id": session_id,
+            "preferences": await preference_extractor.generate_preference_explanation(
+                session_data.get('user_preferences', {})
+            )
+        }
     
     except Exception as e:
+        print(f"Search error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Search error: {str(e)}")
 
 @app.post("/api/voice-search")
 async def voice_search(request: VoiceRequest):
-    # Load user profile if user_id is provided
-    user_profile = None
-    if hasattr(request, 'user_id') and request.user_id:
-        user_profile = user_profile_utils.get_user_profile(request.user_id)
-    # Add user profile to context for logging
-    """Voice assistant for search and conversation with context"""
+    """Voice assistant for search and conversation with enhanced context awareness"""
     try:
+        # Get or create session
+        session_id, session_data = session_manager.get_or_create_session(request.session_id)
+        
+        # Load user profile if user_id is provided
+        user_profile = None
+        if hasattr(request, 'user_id') and request.user_id:
+            user_profile = user_profile_utils.get_user_profile(request.user_id)
+        
         if not OPENAI_API_KEY:
             return {
                 "response": f"I heard: '{request.text}'. Voice assistant requires API key configuration.",
                 "action": "none",
                 "data": {},
-                "language": request.language
+                "language": request.language,
+                "session_id": session_id
             }
         
         # Get context data
         devices = devices_store
         plans = plans_store
         
-        session_id = request.session_id or str(uuid.uuid4())
+        # Add user message to conversation history
+        session_manager.add_to_conversation_history(session_id, 'user', request.text)
+        
+        # Add search query to session
+        session_manager.add_search_query(session_id, request.text)
         
         # Create voice assistant LLM chat with enhanced context
         language_context = "Respond in Hindi and English mix" if request.language == "hi" else "Respond in English"
         
-        # Build context string including last search results and chat history
+        # Build context string including last search results and conversation history
         context_data = f"DEVICES: {devices}\n\nPLANS: {plans}"
+        
+        # Get recent conversation from session
+        conversation_history = session_data.get('conversation_history', [])
+        recent_messages = conversation_history[-6:] if conversation_history else []
         
         # Process chat history for better context
         conversation_context = ""
-        if hasattr(request, 'chat_history') and request.chat_history:
-            recent_messages = request.chat_history[-6:]  # Last 6 messages
+        if recent_messages:
             conversation_context = "\n\nRECENT CONVERSATION:\n"
             for msg in recent_messages:
                 if msg.get('type') == 'user':
@@ -377,20 +420,54 @@ async def voice_search(request: VoiceRequest):
                 elif msg.get('type') == 'assistant':
                     conversation_context += f"Assistant: {msg.get('message', '')}\n"
         
-        # Add last search results to context if available
+        # Add last search results context
         search_results_context = ""
-        if hasattr(request, 'last_search_results') and request.last_search_results:
-            search_results_context = f"\n\nLAST SEARCH RESULTS SHOWN TO USER:\n"
-            if request.last_search_results.get('devices'):
-                search_results_context += f"Devices shown: {[d.get('name') for d in request.last_search_results.get('devices', [])]}\n"
-            if request.last_search_results.get('plans'):
-                search_results_context += f"Plans shown: {[p.get('name') for p in request.last_search_results.get('plans', [])]}\n"
+        viewed_devices = session_data.get('viewed_items', {}).get('devices', {})
+        viewed_plans = session_data.get('viewed_items', {}).get('plans', {})
         
-        # Create system message for voice assistant
+        if viewed_devices or viewed_plans:
+            search_results_context = "\n\nRECENTLY VIEWED ITEMS:\n"
+            
+            # Add recently viewed devices
+            recent_devices = []
+            for device_id, view_data in viewed_devices.items():
+                if 'data' in view_data:
+                    device_name = view_data['data'].get('name', '')
+                    if device_name:
+                        recent_devices.append(device_name)
+            
+            if recent_devices:
+                search_results_context += f"Devices viewed: {', '.join(recent_devices[:5])}\n"
+            
+            # Add recently viewed plans
+            recent_plans = []
+            for plan_id, view_data in viewed_plans.items():
+                if 'data' in view_data:
+                    plan_name = view_data['data'].get('name', '')
+                    if plan_name:
+                        recent_plans.append(plan_name)
+            
+            if recent_plans:
+                search_results_context += f"Plans viewed: {', '.join(recent_plans[:5])}\n"
+        
+        # Add preferences context
+        preferences_context = ""
+        user_preferences = session_data.get('user_preferences', {})
+        if user_preferences:
+            preferences_context = "\n\nUSER PREFERENCES:\n"
+            preferences_context += json.dumps(user_preferences, indent=2)
+        
+        # Create enhanced system message for voice assistant
         system_message = f"""You are a helpful voice assistant for Telekom ecommerce. {language_context}.
 
 Available products:
-{context_data}{conversation_context}{search_results_context}
+{context_data}
+
+{preferences_context}
+
+{conversation_context}
+
+{search_results_context}
 
 You are a conversational assistant that remembers context and handles speech recognition errors intelligently.
 
@@ -409,8 +486,7 @@ IMPORTANT: SPEECH RECOGNITION ERROR HANDLING:
 - Only say you cannot help if the request is completely unrelated to phones/plans
 
 CONTEXT UNDERSTANDING:
-- When users ask follow-up questions like "add to cart" after showing search results, you should know what items were previously shown
-- ALWAYS look at the LAST SEARCH RESULTS SHOWN TO USER section to understand what items were recently displayed
+- When users ask follow-up questions like "add to cart" after showing search results, you should know what items were recently viewed
 - If the user mentions a specific product name like "iPhone" or "S plan", match it with the previously shown results
 - If only one item was shown and user says "add to cart", add that item automatically
 - Be smart about understanding references like "add that phone", "I want the cheaper one", etc.
@@ -432,6 +508,7 @@ Always respond in JSON format:
         "cart_items": [{{id, name, price, type}} if adding to cart],
         "comparison": "comparison details if comparing"
     }},
+    "follow_up_questions": ["1-3 relevant follow-up questions"],
     "language": "{request.language}"
 }}
 
@@ -463,43 +540,67 @@ Be conversational, helpful, and contextually aware. When you correct speech reco
                     "language": request.language
                 }
             
-            # If action is search, but no data, do a fallback search
+            # If action is search but no recommendations, use our recommendation engine
             if result.get("action") == "search" and not result.get("data", {}).get("recommended_devices") and not result.get("data", {}).get("recommended_plans"):
-                # Find matching devices and plans
-                recommended_devices = []
-                recommended_plans = []
+                # Use weighted recommendation algorithm
+                recommendations = recommendation_engine.generate_weighted_recommendations(
+                    session_data,
+                    devices,
+                    plans,
+                    request.text
+                )
                 
-                # Simple keyword matching for now - can be enhanced with LLM
-                query_lower = request.text.lower()
+                # Add recommendations to result
+                result["data"]["recommended_devices"] = recommendations.get('devices', [])
+                result["data"]["recommended_plans"] = recommendations.get('plans', [])
                 
-                # Search devices
-                for device in devices:
-                    if (any(keyword in device.get('name', '').lower() for keyword in query_lower.split()) or
-                        any(keyword in device.get('brand', '').lower() for keyword in query_lower.split()) or
-                        any(keyword in device.get('description', '').lower() for keyword in query_lower.split())):
-                        recommended_devices.append(device)
-                
-                # Search plans  
-                for plan in plans:
-                    if (any(keyword in plan.get('name', '').lower() for keyword in query_lower.split()) or
-                        any(keyword in str(plan.get('features', [])).lower() for keyword in query_lower.split())):
-                        recommended_plans.append(plan)
-                
-                # Limit results
-                recommended_devices = recommended_devices[:3]
-                recommended_plans = recommended_plans[:2]
-                
-                result["data"]["recommended_devices"] = recommended_devices
-                result["data"]["recommended_plans"] = recommended_plans
+                # Add explanations if not present
+                if "explanations" not in result["data"]:
+                    result["data"]["device_explanations"] = recommendations.get('device_explanations', {})
+                    result["data"]["plan_explanations"] = recommendations.get('plan_explanations', {})
             
-            # Log LLM recommendation with user profile and context
+            # Add assistant response to conversation history
+            session_manager.add_to_conversation_history(
+                session_id,
+                'assistant',
+                result.get('response', ''),
+                result.get('data', {})
+            )
+            
+            # Extract preferences from conversation periodically
+            if len(session_data['conversation_history']) % 3 == 0:  # Every 3 interactions
+                if not session_data.get('user_preferences') or len(session_data['user_preferences']) == 0:
+                    new_preferences = await preference_extractor.extract_user_preferences(
+                        session_data['conversation_history']
+                    )
+                else:
+                    new_preferences = await preference_extractor.refine_preferences(
+                        session_data['user_preferences'],
+                        session_data['conversation_history'][-5:]  # Use just recent messages for refinement
+                    )
+                
+                if new_preferences:
+                    session_manager.update_user_preferences(session_id, new_preferences)
+            
+            # Update viewed items if search results returned
+            if result.get("action") == "search" and "data" in result:
+                if "recommended_devices" in result["data"]:
+                    for device in result["data"]["recommended_devices"]:
+                        if isinstance(device, dict) and "id" in device:
+                            session_manager.update_viewed_item(session_id, 'devices', device["id"], device)
+                
+                if "recommended_plans" in result["data"]:
+                    for plan in result["data"]["recommended_plans"]:
+                        if isinstance(plan, dict) and "id" in plan:
+                            session_manager.update_viewed_item(session_id, 'plans', plan["id"], plan)
+            
+            # Log LLM recommendation
             llm_recommendation_logger.log_llm_recommendation(
                 user_id=request.user_id if hasattr(request, 'user_id') else None,
                 user_profile=user_profile,
                 llm_input={
                     "text": request.text,
-                    "chat_history": request.chat_history,
-                    "last_search_results": request.last_search_results,
+                    "session_id": session_id,
                     "language": request.language
                 },
                 llm_response=result,
@@ -509,29 +610,361 @@ Be conversational, helpful, and contextually aware. When you correct speech reco
                     "user_profile": user_profile,
                     "session_id": session_id,
                     "conversation_context": conversation_context,
-                    "search_results_context": search_results_context
+                    "search_results_context": search_results_context,
+                    "user_preferences": session_data.get('user_preferences', {})
                 }
             )
+            
+            # Add session_id and preferences to result
+            result["session_id"] = session_id
+            result["preferences"] = await preference_extractor.generate_preference_explanation(
+                session_data.get('user_preferences', {})
+            )
+            
             return result
+        
         except json.JSONDecodeError:
-            return {
-                "response": response_content,
+            error_response = {
+                "response": "I'm having trouble understanding your request. Could you try again?",
                 "action": "none", 
                 "data": {},
-                "language": request.language
+                "language": request.language,
+                "session_id": session_id
+            }
+            
+            # Add error message to conversation history
+            session_manager.add_to_conversation_history(
+                session_id,
+                'assistant',
+                error_response['response']
+            )
+            
+            return error_response
+    
+    except Exception as e:
+        print(f"Voice search error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Voice search error: {str(e)}")
+
+class ChatRequest(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+    language: str = "en"
+    chat_history: Optional[List[Dict]] = None
+
+@app.post("/api/chat")
+async def chat_endpoint(request: ChatRequest):
+    """Chat endpoint for text-based conversations"""
+    try:
+        # Get or create session
+        session_id, session_data = session_manager.get_or_create_session(request.session_id)
+        
+        # Add user message to conversation history
+        session_manager.add_to_conversation_history(session_id, 'user', request.message)
+        
+        # Add search query to session
+        session_manager.add_search_query(session_id, request.message)
+        
+        if not OPENAI_API_KEY:
+            # Fallback if no API key - use simple search
+            search_request = SearchRequest(query=request.message, session_id=session_id)
+            search_result = await smart_search(search_request)
+            
+            response_message = search_result.get("recommendation", "I found some results for you!")
+            
+            return {
+                "response": response_message,
+                "session_id": session_id,
+                "recommendations": {
+                    "devices": search_result.get("devices", []),
+                    "plans": search_result.get("plans", [])
+                },
+                "explanations": {
+                    "device_explanations": search_result.get("device_explanations", {}),
+                    "plan_explanations": search_result.get("plan_explanations", {})
+                },
+                "follow_up_questions": search_result.get("follow_up_questions", []),
+                "preference_summary": search_result.get("preferences", [])
+            }
+        
+        # Get context data 
+        devices = devices_store
+        plans = plans_store
+        
+        # Build conversation context
+        conversation_history = session_data.get('conversation_history', [])
+        recent_messages = conversation_history[-10:] if conversation_history else []
+        
+        conversation_context = ""
+        if recent_messages:
+            conversation_context = "\n\nRECENT CONVERSATION:\n"
+            for msg in recent_messages:
+                if msg.get('type') == 'user':
+                    conversation_context += f"User: {msg.get('message', '')}\n"
+                elif msg.get('type') == 'assistant':
+                    conversation_context += f"Assistant: {msg.get('message', '')}\n"
+        
+        # Add preferences context
+        preferences_context = ""
+        user_preferences = session_data.get('user_preferences', {})
+        if user_preferences:
+            preferences_context = "\n\nUSER PREFERENCES:\n"
+            preferences_context += json.dumps(user_preferences, indent=2)
+        
+        # Create system message for chat assistant
+        language_context = "Respond in Hindi and English mix" if request.language == "hi" else "Respond in English"
+        
+        system_message = f"""You are a helpful chat assistant for Telekom ecommerce. {language_context}.
+
+Available products:
+DEVICES: {devices}
+
+PLANS: {plans}
+
+{preferences_context}
+
+{conversation_context}
+
+You help users find devices and plans through natural conversation. Handle user queries for:
+1. Product search and recommendations
+2. Plan comparisons  
+3. General assistance about devices and plans
+4. Questions about features, pricing, etc.
+
+Always respond in JSON format:
+{{
+    "response": "Your conversational response to the user",
+    "recommendations": {{
+        "devices": [recommended device objects if relevant],
+        "plans": [recommended plan objects if relevant]
+    }},
+    "explanations": {{
+        "device_explanations": {{"device_id": ["reason1", "reason2"]}},
+        "plan_explanations": {{"plan_id": ["reason1", "reason2"]}}
+    }},
+    "follow_up_questions": ["1-3 relevant follow-up questions"],
+    "preference_summary": ["list of understood user preferences"]
+}}
+
+Be conversational, helpful, and provide specific product recommendations when relevant."""
+        
+        # Send message to OpenAI
+        client = get_openai_client()
+        response = await client.chat.completions.create(
+            model=LLM_MODEL,
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": request.message}
+            ],
+            temperature=0.7,
+            max_tokens=1500
+        )
+        
+        # Parse LLM response
+        response_content = response.choices[0].message.content
+        try:
+            result = json.loads(response_content)
+            
+            # If LLM doesn't return structured data, create a simple response
+            if "response" not in result:
+                result = {
+                    "response": response_content,
+                    "recommendations": {"devices": [], "plans": []},
+                    "explanations": {"device_explanations": {}, "plan_explanations": {}},
+                    "follow_up_questions": [],
+                    "preference_summary": []
+                }
+            
+            # If no specific recommendations but there's a search intent, use recommendation engine
+            if (not result.get("recommendations", {}).get("devices") and 
+                not result.get("recommendations", {}).get("plans") and
+                any(keyword in request.message.lower() for keyword in ['find', 'search', 'recommend', 'suggest', 'want', 'need', 'looking', 'show'])):
+                
+                # Use weighted recommendation algorithm
+                recommendations = recommendation_engine.generate_weighted_recommendations(
+                    session_data,
+                    devices,
+                    plans,
+                    request.message
+                )
+                
+                # Add recommendations to result
+                result["recommendations"]["devices"] = recommendations.get('devices', [])
+                result["recommendations"]["plans"] = recommendations.get('plans', [])
+                result["explanations"]["device_explanations"] = recommendations.get('device_explanations', {})
+                result["explanations"]["plan_explanations"] = recommendations.get('plan_explanations', {})
+            
+            # Add assistant response to conversation history
+            session_manager.add_to_conversation_history(
+                session_id,
+                'assistant',
+                result.get('response', ''),
+                result.get('recommendations', {})
+            )
+            
+            # Update viewed items if search results returned
+            if result.get("recommendations", {}).get("devices"):
+                for device in result["recommendations"]["devices"]:
+                    if isinstance(device, dict) and "id" in device:
+                        session_manager.update_viewed_item(session_id, 'devices', device["id"], device)
+            
+            if result.get("recommendations", {}).get("plans"):
+                for plan in result["recommendations"]["plans"]:
+                    if isinstance(plan, dict) and "id" in plan:
+                        session_manager.update_viewed_item(session_id, 'plans', plan["id"], plan)
+            
+            # Extract preferences from conversation periodically
+            if len(session_data['conversation_history']) % 3 == 0:  # Every 3 interactions
+                if not session_data.get('user_preferences') or len(session_data['user_preferences']) == 0:
+                    new_preferences = await preference_extractor.extract_user_preferences(
+                        session_data['conversation_history']
+                    )
+                else:
+                    new_preferences = await preference_extractor.refine_preferences(
+                        session_data['user_preferences'],
+                        session_data['conversation_history'][-5:]  # Use just recent messages for refinement
+                    )
+                
+                if new_preferences:
+                    session_manager.update_user_preferences(session_id, new_preferences)
+                    result["preference_summary"] = await preference_extractor.generate_preference_explanation(new_preferences)
+            
+            # Add session_id to result
+            result["session_id"] = session_id
+            result["session"] = {
+                "session_id": session_id,
+                "user_preferences": session_data.get('user_preferences', {}),
+                "conversation_count": len(session_data.get('conversation_history', []))
+            }
+            
+            return result
+        
+        except json.JSONDecodeError:
+            # If JSON parsing fails, return a simple response
+            session_manager.add_to_conversation_history(
+                session_id,
+                'assistant',
+                "I'm having trouble understanding your request. Could you try again?"
+            )
+            
+            return {
+                "response": "I'm having trouble understanding your request. Could you try again?",
+                "session_id": session_id,
+                "recommendations": {"devices": [], "plans": []},
+                "explanations": {"device_explanations": {}, "plan_explanations": {}},
+                "follow_up_questions": ["What kind of device are you looking for?", "Are you interested in any specific features?"],
+                "preference_summary": []
             }
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Voice search error: {str(e)}")
+        print(f"Chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")
+
+@app.get("/api/session/{session_id}")
+async def get_session_data(session_id: str):
+    """Get session data for the frontend"""
+    session_data = session_manager.get_session(session_id)
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+    
+    # Return a sanitized version of the session data
+    # (omitting internal implementation details)
+    return {
+        "session_id": session_id,
+        "created_at": session_data.get("created_at"),
+        "last_access": session_data.get("last_access"),
+        "conversation_count": len(session_data.get("conversation_history", [])),
+        "user_preferences": session_data.get("user_preferences", {}),
+        "recently_viewed": {
+            "devices": [
+                {
+                    "id": device_id,
+                    "name": device_data.get("data", {}).get("name", ""),
+                    "view_count": device_data.get("view_count", 0),
+                    "last_viewed": device_data.get("last_viewed")
+                }
+                for device_id, device_data in session_data.get("viewed_items", {}).get("devices", {}).items()
+                if "data" in device_data
+            ][:5],
+            "plans": [
+                {
+                    "id": plan_id,
+                    "name": plan_data.get("data", {}).get("name", ""),
+                    "view_count": plan_data.get("view_count", 0),
+                    "last_viewed": plan_data.get("last_viewed")
+                }
+                for plan_id, plan_data in session_data.get("viewed_items", {}).get("plans", {}).items()
+                if "data" in plan_data
+            ][:5]
+        },
+        "preferences_summary": await preference_extractor.generate_preference_explanation(
+            session_data.get("user_preferences", {})
+        )
+    }
+
+@app.post("/api/session/{session_id}/preferences")
+async def update_session_preferences(session_id: str, request: PreferenceUpdateRequest):
+    """Update user preferences in session"""
+    session_data = session_manager.get_session(session_id)
+    if not session_data:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+    
+    # Update preferences
+    success = session_manager.update_user_preferences(session_id, request.preferences)
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to update preferences")
+    
+    # Return updated preferences summary
+    updated_session = session_manager.get_session(session_id)
+    return {
+        "success": True,
+        "preferences": updated_session.get("user_preferences", {}),
+        "preferences_summary": await preference_extractor.generate_preference_explanation(
+            updated_session.get("user_preferences", {})
+        )
+    }
 
 @app.get("/api/featured-devices")
-async def get_featured_devices():
+async def get_featured_devices(session_id: Optional[str] = None):
     """Get featured devices for homepage"""
+    # If session provided, use preferences for personalized recommendations
+    if session_id:
+        session_data = session_manager.get_session(session_id)
+        if session_data and session_data.get('user_preferences'):
+            # Use recommendation engine for personalized featured devices
+            recommendations = recommendation_engine.generate_weighted_recommendations(
+                session_data,
+                devices_store,
+                [],  # No plans needed for featured devices
+                None  # No specific query
+            )
+            
+            if recommendations and recommendations.get('devices'):
+                # Return personalized recommendations
+                return recommendations['devices'][:3]
+    
+    # Default behavior - return first 3 devices
     return devices_store[:3]
 
-@app.get("/api/popular-plans") 
-async def get_popular_plans():
-    """Get popular plans"""
+@app.get("/api/popular-plans")
+async def get_popular_plans(session_id: Optional[str] = None):
+    """Get popular plans, potentially personalized by user preferences"""
+    # If session provided, use preferences for personalized recommendations
+    if session_id:
+        session_data = session_manager.get_session(session_id)
+        if session_data and session_data.get('user_preferences'):
+            # Use recommendation engine for personalized popular plans
+            recommendations = recommendation_engine.generate_weighted_recommendations(
+                session_data,
+                [],  # No devices needed for popular plans
+                plans_store,
+                None  # No specific query
+            )
+            
+            if recommendations and recommendations.get('plans'):
+                # Return personalized recommendations
+                return recommendations['plans'][:3]
+    
+    # Default behavior - return popular plans or first few if none marked as popular
     popular = [p for p in plans_store if p.get("popular", False)]
     if not popular:
         popular = plans_store[:2]
@@ -548,7 +981,11 @@ async def health_check():
         "api": "healthy",
         "storage": "healthy",
         "openai": "unknown",
-        "timestamp": asyncio.get_event_loop().time()
+        "sessions": {
+            "active_count": len(session_manager.session_store),
+            "status": "healthy"
+        },
+        "timestamp": datetime.utcnow().isoformat()
     }
     
     # Check in-memory storage
