@@ -7,7 +7,9 @@ import uuid
 import asyncio
 import json
 from dotenv import load_dotenv
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, OpenAI
+import numpy as np
+import faiss
 
 load_dotenv()
 
@@ -141,10 +143,20 @@ def load_plans_from_csv(csv_path):
 
 sample_plans = load_plans_from_csv(os.path.join(os.path.dirname(__file__), 'sample_plans.csv'))
 
+# Embedding demo storage
+embeddings_demo = {
+    'devices': None,
+    'plans': None,
+    'device_texts': [],
+    'plan_texts': []
+}
+
+EMBEDDING_MODEL = "text-embedding-3-small"
+
 @app.on_event("startup")
 async def startup_event():
     """Initialize in-memory storage with sample data"""
-    global devices_store, plans_store
+    global devices_store, plans_store, embeddings_demo
     
     try:
         # Initialize devices store
@@ -158,6 +170,20 @@ async def startup_event():
         # Check OpenAI API key
         if OPENAI_API_KEY:
             print("✅ OpenAI API key configured")
+            # Embedding demo: generate and log embeddings for all devices/plans
+            openai_client = OpenAI(api_key=OPENAI_API_KEY)
+            device_texts = [f"{d['name']} {d['brand']} {d['description']} {' '.join(d.get('features', []))}" for d in devices_store]
+            plan_texts = [f"{p['name']} {p['duration']} {p['data']} {p['minutes']} {p['sms']} {' '.join(p.get('features', []))}" for p in plans_store]
+            print("Generating device embeddings...")
+            device_embeds = openai_client.embeddings.create(input=device_texts, model=EMBEDDING_MODEL)
+            print("Generating plan embeddings...")
+            plan_embeds = openai_client.embeddings.create(input=plan_texts, model=EMBEDDING_MODEL)
+            embeddings_demo['devices'] = np.array([e.embedding for e in device_embeds.data]).astype('float32')
+            embeddings_demo['plans'] = np.array([e.embedding for e in plan_embeds.data]).astype('float32')
+            embeddings_demo['device_texts'] = device_texts
+            embeddings_demo['plan_texts'] = plan_texts
+            print(f"Device embeddings shape: {embeddings_demo['devices'].shape}")
+            print(f"Plan embeddings shape: {embeddings_demo['plans'].shape}")
         else:
             print("⚠️  OpenAI API key not configured - AI features will be disabled")
         
@@ -567,6 +593,19 @@ async def health_check():
         health_status["openai"] = "not_configured"
     
     return health_status
+
+@app.get("/api/embeddings")
+async def get_embeddings_demo():
+    """Showcase device/plan embeddings (for demo only)"""
+    if not embeddings_demo['devices'] is None and not embeddings_demo['plans'] is None:
+        return {
+            "device_texts": embeddings_demo['device_texts'],
+            "plan_texts": embeddings_demo['plan_texts'],
+            "device_embeddings_shape": embeddings_demo['devices'].shape,
+            "plan_embeddings_shape": embeddings_demo['plans'].shape
+        }
+    else:
+        return {"error": "Embeddings not generated. Check OpenAI API key and restart server."}
 
 if __name__ == "__main__":
     import uvicorn
