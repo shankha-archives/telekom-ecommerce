@@ -1,0 +1,3692 @@
+{
+    "filterCharacteristics": [
+        {
+            "name": "selectedProductOfferingTerm",
+            "label": "Vertragslaufzeit",
+            "provideQuantity": false,
+            "characteristicValues": [
+                {
+                    "label": "24 Monate Vertragslaufzeit",
+                    "isDefault": false,
+                    "value": "agreement24",
+                    "quantity": 1
+                },
+                {
+                    "label": "Keine Vertragslaufzeit (agreement00)",
+                    "isDefault": false,
+                    "value": "agreement00",
+                    "quantity": 1
+                }
+            ],
+            "booleanValueType": false
+        }
+    ],
+    "page": 0,
+    "size": 0,
+    "resultCount": 0,
+    "salesOfferings": [
+        {
+            "productOffering": {
+                "group": "tariff",
+                "businessGroup": "TARIFF",
+                "associatedBusinessGroups": [],
+                "associatedBusinessProcesses": [],
+                "id": "MF_17249",
+                "name": "MagentaMobil Basic",
+                "description": "<div><div><strong>Aktion</strong>: jetzt bestellen und <strong>60 € Cashback</strong> sichern<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk> (nur für Neukunden)<br /> </div>\n<div><p><strong>Internet</strong></p>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>5 GB Highspeed-Volumen (mit LTE Max/5G)</li><li>Geschwindigkeit im Download: bis zu 300 MBit/s</li><li>Geschwindigkeit im Upload: bis zu 50 MBit/s</li><li>Nach Verbrauch des Highspeed-Volumens wird die Geschwindigkeit im jeweiligen Monat auf max. 64 KBit/s (Download) und 16 KBit/s (Upload) reduziert.</li></ul>\n<div><div><br /><strong>Inklusivleistungen</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Telefonie- und SMS-Flat in alle deutschen Netze:<br />Telefonieren Sie unbegrenzt ins deutsche Mobilfunk- und Festnetz und versenden Sie unbegrenzt SMS.</li><li>Hotspot Flat:<br />Mit einem Telekom HotSpot in Ihrer Nähe können Sie auch unterwegs surfen, ohne dabei das eigene Datenvolumen zu verbrauchen.<br />Mehr Infos unter <a href=\"https://www.hotspot.de\" style=\"color: #007faf\" target=\"blank\">www.hotspot.de</a></li><li>Roaming:<br />In der EU inkl. Schweiz & Großbritannien surfen und telefonieren Sie auf vorübergehenden Reisen ohne zusätzliche Kosten wie im Inland.</li></ul></div>\n<div><br /><strong>Tarife ohne Mindestlaufzeit</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Infos zu Tarifen ohne Mindestlaufzeit, die lediglich ohne Gerät erhältlich sind, finden Sie unter www.telekom.de/flex-mobil oder in der Preisliste.</li></ul></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf\" style=\"color: #007faf\">Produktinformationsblatt (PDF)</a></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/agb/direkt?AGBID=2199\" style=\"color: #007faf\">Preisliste, Leistungsbeschreibung und AGB</a></div></div></div>\n<div><div> </div></div></div>",
+                "shortDescription": "5 GB | LTE Max und 5G - 60 € Cashback sichern[ln:5NrogR]",
+                "restricted": false,
+                "characteristics": [
+                    {
+                        "name": "selectedProductOfferingTerm",
+                        "label": "Vertragslaufzeit",
+                        "valueType": "productOfferingTerm",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": true,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingTerm",
+                                "label": "24 Monate Vertragslaufzeit",
+                                "isDefault": true,
+                                "value": "agreement24"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "DataVolumePostpaid5GLTE",
+                        "label": "Highspeed-Volumen mit LTE und 5G",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "5 GB",
+                                "isDefault": false,
+                                "value": "1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "telefonie_sms",
+                        "label": "Telefonie und SMS",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "Flat in alle deutschen Netze",
+                                "isDefault": false,
+                                "value": "2"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "AGB_ID",
+                        "label": "Allgemeine Geschäftsbedingungen",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "2199",
+                                "isDefault": false,
+                                "value": "2199"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Data",
+                        "label": "Datenvolumen ",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "data",
+                                "isDefault": false,
+                                "value": "5"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "SMS",
+                        "label": "SMS ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "SMS",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "svGroup",
+                        "label": "svGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "svGroup",
+                                "isDefault": false,
+                                "value": "basic"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "subLevel",
+                        "label": "subLevel",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "subLevel",
+                                "isDefault": false,
+                                "value": "eco"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Voice",
+                        "label": "Voice ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "voice",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "familyCardEligible",
+                        "label": "familyCardEligible",
+                        "valueType": "boolean",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "boolean",
+                                "label": "familyCardEligible",
+                                "isDefault": false,
+                                "value": "true"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "productInformationSheet",
+                        "label": "sheet link download",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "Produktinformationsblatt (PDF)",
+                                "isDefault": false,
+                                "value": "https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "additionalShortDescription",
+                        "label": "Magenta1 Kurzbeschreibung",
+                        "valueType": "text",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G",
+                                "isDefault": false,
+                                "value": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardGroup",
+                        "label": "cardGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardGroup",
+                                "isDefault": true,
+                                "value": "NMMAIN"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardType",
+                        "label": "cardType",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardType",
+                                "isDefault": true,
+                                "value": "adult"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "EUREG",
+                        "label": "Nutzungskontrolle Dataroaming ein",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "EUREG",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "VVMMBX",
+                        "label": "Mobilbox Pro",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "VVMMBX",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "IMSPDP",
+                        "label": "VoLTE und WLAN Call",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "IMSPDP",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "PBCROAM",
+                        "label": "Travel & Surf",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "PBCROAM",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "TNV3PNR_V",
+                        "label": "Teilnehmerverhältnis",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "TNV3PNR_V",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WLANDOFLAT",
+                        "label": "HotSpot Flat inklusive",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WLANDOFLAT",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1438",
+                        "label": "Datenflat Basic 5GB 5G",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1438",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1450",
+                        "label": "Basic Roaming PK",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1450",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    }
+                ],
+                "priority": 0,
+                "categories": [
+                    {
+                        "id": "MOBILEPOSTPAID",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "voice",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "smartphone-tarife",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "postpaid",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "mobile",
+                        "entityType": "Category"
+                    }
+                ],
+                "channels": [
+                    {
+                        "id": "OneShop",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oneApp",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MagentaView",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    }
+                ],
+                "attachments": [],
+                "productOfferingPrices": [
+                    {
+                        "id": "MF_17249-OTC-Price",
+                        "name": "oneTimeTariffFee",
+                        "priceType": "activationFee",
+                        "entityType": "ProductOfferingPrice",
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 39.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": [
+                            {
+                                "name": "externalID",
+                                "label": "externalID",
+                                "valueType": "text",
+                                "isCustomerVisible": true,
+                                "currencyCode": "",
+                                "configurable": false,
+                                "minCardinality": 1,
+                                "maxCardinality": 1,
+                                "entityType": "configuration",
+                                "characteristicValues": [
+                                    {
+                                        "label": "O-1573778,NK,INK_WK_ALL,9900299999995,1",
+                                        "isDefault": false,
+                                        "value": "externalID"
+                                    }
+                                ],
+                                "validationRules": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_17249-MRC-Price",
+                        "name": "monthlyTariffFee",
+                        "label": "Monatlich",
+                        "priceType": "recurringFee",
+                        "entityType": "ProductOfferingPrice",
+                        "recurringChargePeriod": "month",
+                        "recurringChargeDuration": 1,
+                        "recurringChargeOccurrence": -1,
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 24.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": [
+                            {
+                                "name": "externalID",
+                                "label": "externalID",
+                                "valueType": "text",
+                                "isCustomerVisible": true,
+                                "currencyCode": "",
+                                "configurable": false,
+                                "minCardinality": 1,
+                                "maxCardinality": 1,
+                                "entityType": "configuration",
+                                "characteristicValues": [
+                                    {
+                                        "label": "O-1573778,NK,INK_WK_ALL,9900299999995,1",
+                                        "isDefault": false,
+                                        "value": "externalID"
+                                    }
+                                ],
+                                "validationRules": []
+                            }
+                        ]
+                    }
+                ],
+                "productSpecificationRef": {
+                    "id": "MF_17249",
+                    "name": "MagentaMobil Basic",
+                    "subscriberName": ""
+                },
+                "relatedProductOfferings": [],
+                "autoLinking": {
+                    "businessProcess": [],
+                    "mappedVariant": ""
+                },
+                "deliveryTime": "",
+                "associatedVariantIds": [],
+                "variantUSP": [
+                    {
+                        "type": "m1",
+                        "value": "<div class=\"labelContainer\"><div class=\"magentaLabel\"><div class=\"tariffLabel\"><span>Bis zu 120 € <span style=\"white-space: nowrap;\">Cashback<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk></span></span></div></div></div>"
+                    },
+                    {
+                        "type": "standard",
+                        "value": "<div class=\"labelContainer\"><div class=\"magentaLabel\"><div class=\"tariffLabel\"><span>Bis zu 120 € <span style=\"white-space: nowrap;\">Cashback<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk></span></span></div></div></div>"
+                    }
+                ],
+                "productOfferingGroups": [
+                    {
+                        "id": "MF_ParamountOptionen_0",
+                        "name": "Paramount+",
+                        "description": "",
+                        "shortDescription": "Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "40",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/QkqlPEbzkiciSAz0AvVTC39kBOpud1.png",
+                                "type": "image",
+                                "name": "paramount-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "ParamountOptionen",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_AppleTVOptionen_0",
+                        "name": "Apple TV+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "10",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/lrsOgQgIWMnjvdZlKl7mnxdVT87nhs.png",
+                                "type": "image",
+                                "name": "apple-tv-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Apple TV+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_NetflixOptionen_0",
+                        "name": "Netflix Optionen_0",
+                        "description": "Netflix Description",
+                        "shortDescription": "Netflix Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "30",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/hDF0sxrjrG30pOFq5obMFzI1Hp8TEQ.png",
+                                "type": "image",
+                                "name": "netflix.png",
+                                "translations": [
+                                    {
+                                        "description": "Netflix Optionen_0",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_DisneyOptionen_0",
+                        "name": "Disney+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "20",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/3D2MA6fjG5hDKZb5MbSnRGVWmUQYuM.png",
+                                "type": "image",
+                                "name": "disney-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Disney+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_SpotifyOptionen_0",
+                        "name": "Spotify",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "50",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/TpYgqWE5LcIUKbmHMmjkVC8VOWsf65.png",
+                                "type": "image",
+                                "name": "spotify-premium.png",
+                                "translations": [
+                                    {
+                                        "description": "Spotify",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "relatedEntities": [],
+                "position": 1,
+                "customerVisible": false,
+                "isOfferingPriceFromPCM": false,
+                "isBundle": false,
+                "isProduct": true
+            },
+            "filterCharacteristics": [
+                {
+                    "name": "telefonie_sms",
+                    "label": "Telefonie und SMS",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "Flat in alle deutschen Netze",
+                            "isDefault": false,
+                            "value": "2",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                },
+                {
+                    "name": "DataVolumePostpaid5GLTE",
+                    "label": "Highspeed-Volumen mit LTE und 5G",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "5 GB",
+                            "isDefault": false,
+                            "value": "1",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                }
+            ],
+            "characteristics": []
+        },
+        {
+            "productOffering": {
+                "group": "tariff",
+                "businessGroup": "TARIFF",
+                "associatedBusinessGroups": [],
+                "associatedBusinessProcesses": [],
+                "id": "MF_17251",
+                "name": "MagentaMobil Basic mit Smartphone",
+                "description": "<div><strong>Aktion</strong>: jetzt bestellen und <strong>120 € Cashback</strong> sichern<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk> (nur für Neukunden)<br /> </div>\n<div><strong>Internet</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>5 GB Highspeed-Volumen (mit LTE Max/5G)</li><li>Geschwindigkeit im Download: bis zu 300 MBit/s</li><li>Geschwindigkeit im Upload: bis zu 50 MBit/s</li><li>Nach Verbrauch des Highspeed-Volumens wird die Geschwindigkeit im jeweiligen Monat auf max. 64 KBit/s (Download) und 16 KBit/s (Upload) reduziert.</li></ul>\n<div><div><br /><strong>Inklusivleistungen</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Telefonie- und SMS-Flat in alle deutschen Netze:<br />Telefonieren Sie unbegrenzt ins deutsche Mobilfunk- und Festnetz und versenden Sie unbegrenzt SMS.</li><li>Hotspot Flat:<br />Mit einem Telekom HotSpot in Ihrer Nähe können Sie auch unterwegs surfen, ohne dabei das eigene Datenvolumen zu verbrauchen.<br />Mehr Infos unter <a href=\"https://www.hotspot.de\" style=\"color: #007faf\" target=\"blank\">www.hotspot.de</a></li><li>Roaming:<br />In der EU inkl. Schweiz & Großbritannien surfen und telefonieren Sie auf vorübergehenden Reisen ohne zusätzliche Kosten wie im Inland.</li></ul></div>\n<div><br /><strong>Tarife ohne Mindestlaufzeit</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Infos zu Tarifen ohne Mindestlaufzeit, die lediglich ohne Gerät erhältlich sind, finden Sie unter www.telekom.de/flex-mobil oder in der Preisliste.</li></ul></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf\" style=\"color: #007faf\">Produktinformationsblatt (PDF)</a></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/agb/direkt?AGBID=2199\" style=\"color: #007faf\">Preisliste, Leistungsbeschreibung und AGB</a></div></div></div>",
+                "shortDescription": "5 GB | LTE Max und 5G - 120 € Cashback sichern[ln:5NrogR]",
+                "restricted": false,
+                "characteristics": [
+                    {
+                        "name": "selectedProductOfferingTerm",
+                        "label": "Vertragslaufzeit",
+                        "valueType": "productOfferingTerm",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": true,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingTerm",
+                                "label": "24 Monate Vertragslaufzeit",
+                                "isDefault": true,
+                                "value": "agreement24"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "DataVolumePostpaid5GLTE",
+                        "label": "Highspeed-Volumen mit LTE und 5G",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "5 GB",
+                                "isDefault": false,
+                                "value": "1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "telefonie_sms",
+                        "label": "Telefonie und SMS",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "Flat in alle deutschen Netze",
+                                "isDefault": false,
+                                "value": "2"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "AGB_ID",
+                        "label": "Allgemeine Geschäftsbedingungen",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "2199",
+                                "isDefault": false,
+                                "value": "2199"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Data",
+                        "label": "Datenvolumen ",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "data",
+                                "isDefault": false,
+                                "value": "5"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "SMS",
+                        "label": "SMS ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "SMS",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "svGroup",
+                        "label": "svGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "svGroup",
+                                "isDefault": false,
+                                "value": "basic"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "subLevel",
+                        "label": "subLevel",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "subLevel",
+                                "isDefault": false,
+                                "value": "sub_10"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Voice",
+                        "label": "Voice ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "voice",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "familyCardEligible",
+                        "label": "familyCardEligible",
+                        "valueType": "boolean",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "boolean",
+                                "label": "familyCardEligible",
+                                "isDefault": false,
+                                "value": "true"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "productInformationSheet",
+                        "label": "sheet link download",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "Produktinformationsblatt (PDF)",
+                                "isDefault": false,
+                                "value": "https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "additionalShortDescription",
+                        "label": "Magenta1 Kurzbeschreibung",
+                        "valueType": "text",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G",
+                                "isDefault": false,
+                                "value": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardGroup",
+                        "label": "cardGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardGroup",
+                                "isDefault": true,
+                                "value": "NMMAIN"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardType",
+                        "label": "cardType",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardType",
+                                "isDefault": true,
+                                "value": "adult"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "EUREG",
+                        "label": "Nutzungskontrolle Dataroaming ein",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "EUREG",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "VVMMBX",
+                        "label": "Mobilbox Pro",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "VVMMBX",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "IMSPDP",
+                        "label": "VoLTE und WLAN Call",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "IMSPDP",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "PBCROAM",
+                        "label": "Travel & Surf",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "PBCROAM",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "TNV3PNR_V",
+                        "label": "Teilnehmerverhältnis",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "TNV3PNR_V",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WLANDOFLAT",
+                        "label": "HotSpot Flat inklusive",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WLANDOFLAT",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1438",
+                        "label": "Datenflat Basic 5GB 5G",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1438",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1450",
+                        "label": "Basic Roaming PK",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1450",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    }
+                ],
+                "priority": 0,
+                "categories": [
+                    {
+                        "id": "MOBILEPOSTPAID",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "voice",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "smartphone-tarife",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "postpaid",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "mobile",
+                        "entityType": "Category"
+                    }
+                ],
+                "channels": [
+                    {
+                        "id": "OneShop",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oneApp",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MagentaView",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    }
+                ],
+                "attachments": [],
+                "productOfferingPrices": [
+                    {
+                        "id": "MF_17251-OTC-Price",
+                        "name": "oneTimeTariffFee",
+                        "priceType": "activationFee",
+                        "entityType": "ProductOfferingPrice",
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 39.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    },
+                    {
+                        "id": "MF_17251-MRC-Price",
+                        "name": "monthlyTariffFee",
+                        "label": "Monatlich",
+                        "priceType": "recurringFee",
+                        "entityType": "ProductOfferingPrice",
+                        "recurringChargePeriod": "month",
+                        "recurringChargeDuration": 1,
+                        "recurringChargeOccurrence": -1,
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 34.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    }
+                ],
+                "productSpecificationRef": {
+                    "id": "MF_17251",
+                    "name": "MagentaMobil Basic mit Smartphone",
+                    "subscriberName": ""
+                },
+                "relatedProductOfferings": [],
+                "autoLinking": {
+                    "businessProcess": [],
+                    "mappedVariant": ""
+                },
+                "deliveryTime": "",
+                "associatedVariantIds": [],
+                "variantUSP": [
+                    {
+                        "type": "m1",
+                        "value": "<div class=\"labelContainer\"><div class=\"magentaLabel\"><div class=\"tariffLabel\"><span>Bis zu 120 € <span style=\"white-space: nowrap;\">Cashback<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk></span></span></div></div></div>"
+                    },
+                    {
+                        "type": "standard",
+                        "value": "<div class=\"labelContainer\"><div class=\"magentaLabel\"><div class=\"tariffLabel\"><span>Bis zu 120 € <span style=\"white-space: nowrap;\">Cashback<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk></span></span></div></div></div>"
+                    }
+                ],
+                "productOfferingGroups": [
+                    {
+                        "id": "MF_ParamountOptionen_0",
+                        "name": "Paramount+",
+                        "description": "",
+                        "shortDescription": "Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "40",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/QkqlPEbzkiciSAz0AvVTC39kBOpud1.png",
+                                "type": "image",
+                                "name": "paramount-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "ParamountOptionen",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_AppleTVOptionen_0",
+                        "name": "Apple TV+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "10",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/lrsOgQgIWMnjvdZlKl7mnxdVT87nhs.png",
+                                "type": "image",
+                                "name": "apple-tv-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Apple TV+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_NetflixOptionen_0",
+                        "name": "Netflix Optionen_0",
+                        "description": "Netflix Description",
+                        "shortDescription": "Netflix Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "30",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/hDF0sxrjrG30pOFq5obMFzI1Hp8TEQ.png",
+                                "type": "image",
+                                "name": "netflix.png",
+                                "translations": [
+                                    {
+                                        "description": "Netflix Optionen_0",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_DisneyOptionen_0",
+                        "name": "Disney+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "20",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/3D2MA6fjG5hDKZb5MbSnRGVWmUQYuM.png",
+                                "type": "image",
+                                "name": "disney-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Disney+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_SpotifyOptionen_0",
+                        "name": "Spotify",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "50",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/TpYgqWE5LcIUKbmHMmjkVC8VOWsf65.png",
+                                "type": "image",
+                                "name": "spotify-premium.png",
+                                "translations": [
+                                    {
+                                        "description": "Spotify",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_O-1657646",
+                        "name": "Xiaomi 14 (black)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657645",
+                        "name": "Apple iPhone 16 Pro 256 GB titan wüstensand",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657644",
+                        "name": "Samsung Galaxy S24 128 GB (cobalt violet)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    }
+                ],
+                "relatedEntities": [],
+                "position": 1,
+                "customerVisible": false,
+                "isOfferingPriceFromPCM": false,
+                "isBundle": false,
+                "isProduct": true
+            },
+            "filterCharacteristics": [
+                {
+                    "name": "telefonie_sms",
+                    "label": "Telefonie und SMS",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "Flat in alle deutschen Netze",
+                            "isDefault": false,
+                            "value": "2",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                },
+                {
+                    "name": "DataVolumePostpaid5GLTE",
+                    "label": "Highspeed-Volumen mit LTE und 5G",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "5 GB",
+                            "isDefault": false,
+                            "value": "1",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                }
+            ],
+            "characteristics": []
+        },
+        {
+            "productOffering": {
+                "group": "tariff",
+                "businessGroup": "TARIFF",
+                "associatedBusinessGroups": [],
+                "associatedBusinessProcesses": [],
+                "id": "MF_17252",
+                "name": "MagentaMobil Basic mit Top-Smartphone",
+                "description": "<div><strong>Aktion</strong>: jetzt bestellen und <strong>120 € Cashback</strong> sichern<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk> (nur für Neukunden)<br /> </div>\n<div><strong>Internet</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>5 GB Highspeed-Volumen (mit LTE Max/5G)</li><li>Geschwindigkeit im Download: bis zu 300 MBit/s</li><li>Geschwindigkeit im Upload: bis zu 50 MBit/s</li><li>Nach Verbrauch des Highspeed-Volumens wird die Geschwindigkeit im jeweiligen Monat auf max. 64 KBit/s (Download) und 16 KBit/s (Upload) reduziert.</li></ul>\n<div><div><br /><strong>Inklusivleistungen</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Telefonie- und SMS-Flat in alle deutschen Netze:<br />Telefonieren Sie unbegrenzt ins deutsche Mobilfunk- und Festnetz und versenden Sie unbegrenzt SMS.</li><li>Hotspot Flat:<br />Mit einem Telekom HotSpot in Ihrer Nähe können Sie auch unterwegs surfen, ohne dabei das eigene Datenvolumen zu verbrauchen.<br />Mehr Infos unter <a href=\"https://www.hotspot.de\" style=\"color: #007faf\" target=\"blank\">www.hotspot.de</a></li><li>Roaming:<br />In der EU inkl. Schweiz & Großbritannien surfen und telefonieren Sie auf vorübergehenden Reisen ohne zusätzliche Kosten wie im Inland.</li></ul></div>\n<div><br /><strong>Tarife ohne Mindestlaufzeit</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Infos zu Tarifen ohne Mindestlaufzeit, die lediglich ohne Gerät erhältlich sind, finden Sie unter www.telekom.de/flex-mobil oder in der Preisliste.</li></ul></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf\" style=\"color: #007faf\">Produktinformationsblatt (PDF)</a></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/agb/direkt?AGBID=2199\" style=\"color: #007faf\">Preisliste, Leistungsbeschreibung und AGB</a></div></div></div>",
+                "shortDescription": "5 GB | LTE Max und 5G - 120 € Cashback sichern[ln:5NrogR]",
+                "restricted": false,
+                "characteristics": [
+                    {
+                        "name": "selectedProductOfferingTerm",
+                        "label": "Vertragslaufzeit",
+                        "valueType": "productOfferingTerm",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": true,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingTerm",
+                                "label": "24 Monate Vertragslaufzeit",
+                                "isDefault": true,
+                                "value": "agreement24"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "DataVolumePostpaid5GLTE",
+                        "label": "Highspeed-Volumen mit LTE und 5G",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "5 GB",
+                                "isDefault": false,
+                                "value": "1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "telefonie_sms",
+                        "label": "Telefonie und SMS",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "Flat in alle deutschen Netze",
+                                "isDefault": false,
+                                "value": "2"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "AGB_ID",
+                        "label": "Allgemeine Geschäftsbedingungen",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "2199",
+                                "isDefault": false,
+                                "value": "2199"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Data",
+                        "label": "Datenvolumen ",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "data",
+                                "isDefault": false,
+                                "value": "5"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "SMS",
+                        "label": "SMS ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "SMS",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "svGroup",
+                        "label": "svGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "svGroup",
+                                "isDefault": false,
+                                "value": "basic"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "subLevel",
+                        "label": "subLevel",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "subLevel",
+                                "isDefault": false,
+                                "value": "sub_20"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Voice",
+                        "label": "Voice ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "voice",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "familyCardEligible",
+                        "label": "familyCardEligible",
+                        "valueType": "boolean",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "boolean",
+                                "label": "familyCardEligible",
+                                "isDefault": false,
+                                "value": "true"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "productInformationSheet",
+                        "label": "sheet link download",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "Produktinformationsblatt (PDF)",
+                                "isDefault": false,
+                                "value": "https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "additionalShortDescription",
+                        "label": "Magenta1 Kurzbeschreibung",
+                        "valueType": "text",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G",
+                                "isDefault": false,
+                                "value": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardGroup",
+                        "label": "cardGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardGroup",
+                                "isDefault": true,
+                                "value": "NMMAIN"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardType",
+                        "label": "cardType",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardType",
+                                "isDefault": true,
+                                "value": "adult"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "EUREG",
+                        "label": "Nutzungskontrolle Dataroaming ein",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "EUREG",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "VVMMBX",
+                        "label": "Mobilbox Pro",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "VVMMBX",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "IMSPDP",
+                        "label": "VoLTE und WLAN Call",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "IMSPDP",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "PBCROAM",
+                        "label": "Travel & Surf",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "PBCROAM",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "TNV3PNR_V",
+                        "label": "Teilnehmerverhältnis",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "TNV3PNR_V",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WLANDOFLAT",
+                        "label": "HotSpot Flat inklusive",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WLANDOFLAT",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1438",
+                        "label": "Datenflat Basic 5GB 5G",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1438",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1450",
+                        "label": "Basic Roaming PK",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1450",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    }
+                ],
+                "priority": 0,
+                "categories": [
+                    {
+                        "id": "MOBILEPOSTPAID",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "voice",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "smartphone-tarife",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "postpaid",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "mobile",
+                        "entityType": "Category"
+                    }
+                ],
+                "channels": [
+                    {
+                        "id": "OneShop",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oneApp",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MagentaView",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    }
+                ],
+                "attachments": [],
+                "productOfferingPrices": [
+                    {
+                        "id": "MF_17252-OTC-Price",
+                        "name": "oneTimeTariffFee",
+                        "priceType": "activationFee",
+                        "entityType": "ProductOfferingPrice",
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 39.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    },
+                    {
+                        "id": "MF_17252-MRC-Price",
+                        "name": "monthlyTariffFee",
+                        "label": "Monatlich",
+                        "priceType": "recurringFee",
+                        "entityType": "ProductOfferingPrice",
+                        "recurringChargePeriod": "month",
+                        "recurringChargeDuration": 1,
+                        "recurringChargeOccurrence": -1,
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 44.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    }
+                ],
+                "productSpecificationRef": {
+                    "id": "MF_17252",
+                    "name": "MagentaMobil Basic mit Top-Smartphone",
+                    "subscriberName": ""
+                },
+                "relatedProductOfferings": [],
+                "autoLinking": {
+                    "businessProcess": [],
+                    "mappedVariant": ""
+                },
+                "deliveryTime": "",
+                "associatedVariantIds": [],
+                "variantUSP": [],
+                "productOfferingGroups": [
+                    {
+                        "id": "MF_ParamountOptionen_0",
+                        "name": "Paramount+",
+                        "description": "",
+                        "shortDescription": "Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "40",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/QkqlPEbzkiciSAz0AvVTC39kBOpud1.png",
+                                "type": "image",
+                                "name": "paramount-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "ParamountOptionen",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_AppleTVOptionen_0",
+                        "name": "Apple TV+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "10",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/lrsOgQgIWMnjvdZlKl7mnxdVT87nhs.png",
+                                "type": "image",
+                                "name": "apple-tv-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Apple TV+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_NetflixOptionen_0",
+                        "name": "Netflix Optionen_0",
+                        "description": "Netflix Description",
+                        "shortDescription": "Netflix Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "30",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/hDF0sxrjrG30pOFq5obMFzI1Hp8TEQ.png",
+                                "type": "image",
+                                "name": "netflix.png",
+                                "translations": [
+                                    {
+                                        "description": "Netflix Optionen_0",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_DisneyOptionen_0",
+                        "name": "Disney+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "20",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/3D2MA6fjG5hDKZb5MbSnRGVWmUQYuM.png",
+                                "type": "image",
+                                "name": "disney-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Disney+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_SpotifyOptionen_0",
+                        "name": "Spotify",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "50",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/TpYgqWE5LcIUKbmHMmjkVC8VOWsf65.png",
+                                "type": "image",
+                                "name": "spotify-premium.png",
+                                "translations": [
+                                    {
+                                        "description": "Spotify",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_O-1657646",
+                        "name": "Xiaomi 14 (black)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657645",
+                        "name": "Apple iPhone 16 Pro 256 GB titan wüstensand",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657644",
+                        "name": "Samsung Galaxy S24 128 GB (cobalt violet)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    }
+                ],
+                "relatedEntities": [],
+                "position": 1,
+                "customerVisible": false,
+                "isOfferingPriceFromPCM": false,
+                "isBundle": false,
+                "isProduct": true
+            },
+            "filterCharacteristics": [
+                {
+                    "name": "telefonie_sms",
+                    "label": "Telefonie und SMS",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "Flat in alle deutschen Netze",
+                            "isDefault": false,
+                            "value": "2",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                },
+                {
+                    "name": "DataVolumePostpaid5GLTE",
+                    "label": "Highspeed-Volumen mit LTE und 5G",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "5 GB",
+                            "isDefault": false,
+                            "value": "1",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                }
+            ],
+            "characteristics": []
+        },
+        {
+            "productOffering": {
+                "group": "tariff",
+                "businessGroup": "TARIFF",
+                "associatedBusinessGroups": [],
+                "associatedBusinessProcesses": [],
+                "id": "MF_17253",
+                "name": "MagentaMobil Basic mit Premium-Smartphone",
+                "description": "<div><strong>Aktion</strong>: jetzt bestellen und <strong>120 € Cashback</strong> sichern<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk> (nur für Neukunden)<br /> </div>\n<div><strong>Internet</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>5 GB Highspeed-Volumen (mit LTE Max/5G)</li><li>Geschwindigkeit im Download: bis zu 300 MBit/s</li><li>Geschwindigkeit im Upload: bis zu 50 MBit/s</li><li>Nach Verbrauch des Highspeed-Volumens wird die Geschwindigkeit im jeweiligen Monat auf max. 64 KBit/s (Download) und 16 KBit/s (Upload) reduziert.</li></ul>\n<div><div><br /><strong>Inklusivleistungen</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Telefonie- und SMS-Flat in alle deutschen Netze:<br />Telefonieren Sie unbegrenzt ins deutsche Mobilfunk- und Festnetz und versenden Sie unbegrenzt SMS.</li><li>Hotspot Flat:<br />Mit einem Telekom HotSpot in Ihrer Nähe können Sie auch unterwegs surfen, ohne dabei das eigene Datenvolumen zu verbrauchen.<br />Mehr Infos unter <a href=\"https://www.hotspot.de\" style=\"color: #007faf\" target=\"blank\">www.hotspot.de</a></li><li>Roaming:<br />In der EU inkl. Schweiz & Großbritannien surfen und telefonieren Sie auf vorübergehenden Reisen ohne zusätzliche Kosten wie im Inland.</li></ul></div>\n<div><br /><strong>Tarife ohne Mindestlaufzeit</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Infos zu Tarifen ohne Mindestlaufzeit, die lediglich ohne Gerät erhältlich sind, finden Sie unter www.telekom.de/flex-mobil oder in der Preisliste.</li></ul></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf\" style=\"color: #007faf\">Produktinformationsblatt (PDF)</a></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/agb/direkt?AGBID=2199\" style=\"color: #007faf\">Preisliste, Leistungsbeschreibung und AGB</a></div></div></div>",
+                "shortDescription": "5 GB | LTE Max und 5G - 120 € Cashback sichern[ln:5NrogR]",
+                "restricted": false,
+                "characteristics": [
+                    {
+                        "name": "selectedProductOfferingTerm",
+                        "label": "Vertragslaufzeit",
+                        "valueType": "productOfferingTerm",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": true,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingTerm",
+                                "label": "24 Monate Vertragslaufzeit",
+                                "isDefault": true,
+                                "value": "agreement24"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "DataVolumePostpaid5GLTE",
+                        "label": "Highspeed-Volumen mit LTE und 5G",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "5 GB",
+                                "isDefault": false,
+                                "value": "1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "telefonie_sms",
+                        "label": "Telefonie und SMS",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "Flat in alle deutschen Netze",
+                                "isDefault": false,
+                                "value": "2"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "AGB_ID",
+                        "label": "Allgemeine Geschäftsbedingungen",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "2199",
+                                "isDefault": false,
+                                "value": "2199"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Data",
+                        "label": "Datenvolumen ",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "data",
+                                "isDefault": false,
+                                "value": "5"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "SMS",
+                        "label": "SMS ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "SMS",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "svGroup",
+                        "label": "svGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "svGroup",
+                                "isDefault": false,
+                                "value": "basic"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "subLevel",
+                        "label": "subLevel",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "subLevel",
+                                "isDefault": false,
+                                "value": "sub_30"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Voice",
+                        "label": "Voice ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "voice",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "familyCardEligible",
+                        "label": "familyCardEligible",
+                        "valueType": "boolean",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "boolean",
+                                "label": "familyCardEligible",
+                                "isDefault": false,
+                                "value": "true"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "productInformationSheet",
+                        "label": "sheet link download",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "Produktinformationsblatt (PDF)",
+                                "isDefault": false,
+                                "value": "https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "additionalShortDescription",
+                        "label": "Magenta1 Kurzbeschreibung",
+                        "valueType": "text",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G",
+                                "isDefault": false,
+                                "value": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardGroup",
+                        "label": "cardGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardGroup",
+                                "isDefault": true,
+                                "value": "NMMAIN"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardType",
+                        "label": "cardType",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardType",
+                                "isDefault": true,
+                                "value": "adult"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "EUREG",
+                        "label": "Nutzungskontrolle Dataroaming ein",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "EUREG",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "VVMMBX",
+                        "label": "Mobilbox Pro",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "VVMMBX",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "IMSPDP",
+                        "label": "VoLTE und WLAN Call",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "IMSPDP",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "PBCROAM",
+                        "label": "Travel & Surf",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "PBCROAM",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "TNV3PNR_V",
+                        "label": "Teilnehmerverhältnis",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "TNV3PNR_V",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WLANDOFLAT",
+                        "label": "HotSpot Flat inklusive",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WLANDOFLAT",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1438",
+                        "label": "Datenflat Basic 5GB 5G",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1438",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1450",
+                        "label": "Basic Roaming PK",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1450",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    }
+                ],
+                "priority": 0,
+                "categories": [
+                    {
+                        "id": "MOBILEPOSTPAID",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "voice",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "smartphone-tarife",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "postpaid",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "mobile",
+                        "entityType": "Category"
+                    }
+                ],
+                "channels": [
+                    {
+                        "id": "OneShop",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oneApp",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MagentaView",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    }
+                ],
+                "attachments": [],
+                "productOfferingPrices": [
+                    {
+                        "id": "MF_17253-OTC-Price",
+                        "name": "oneTimeTariffFee",
+                        "priceType": "activationFee",
+                        "entityType": "ProductOfferingPrice",
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 39.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    },
+                    {
+                        "id": "MF_17253-MRC-Price",
+                        "name": "monthlyTariffFee",
+                        "label": "Monatlich",
+                        "priceType": "recurringFee",
+                        "entityType": "ProductOfferingPrice",
+                        "recurringChargePeriod": "month",
+                        "recurringChargeDuration": 1,
+                        "recurringChargeOccurrence": -1,
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 54.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    }
+                ],
+                "productSpecificationRef": {
+                    "id": "MF_17253",
+                    "name": "MagentaMobil Basic mit Premium-Smartphone",
+                    "subscriberName": ""
+                },
+                "relatedProductOfferings": [],
+                "autoLinking": {
+                    "businessProcess": [],
+                    "mappedVariant": ""
+                },
+                "deliveryTime": "",
+                "associatedVariantIds": [],
+                "variantUSP": [],
+                "productOfferingGroups": [
+                    {
+                        "id": "MF_ParamountOptionen_0",
+                        "name": "Paramount+",
+                        "description": "",
+                        "shortDescription": "Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "40",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/QkqlPEbzkiciSAz0AvVTC39kBOpud1.png",
+                                "type": "image",
+                                "name": "paramount-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "ParamountOptionen",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_AppleTVOptionen_0",
+                        "name": "Apple TV+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "10",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/lrsOgQgIWMnjvdZlKl7mnxdVT87nhs.png",
+                                "type": "image",
+                                "name": "apple-tv-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Apple TV+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_NetflixOptionen_0",
+                        "name": "Netflix Optionen_0",
+                        "description": "Netflix Description",
+                        "shortDescription": "Netflix Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "30",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/hDF0sxrjrG30pOFq5obMFzI1Hp8TEQ.png",
+                                "type": "image",
+                                "name": "netflix.png",
+                                "translations": [
+                                    {
+                                        "description": "Netflix Optionen_0",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_DisneyOptionen_0",
+                        "name": "Disney+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "20",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/3D2MA6fjG5hDKZb5MbSnRGVWmUQYuM.png",
+                                "type": "image",
+                                "name": "disney-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Disney+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_SpotifyOptionen_0",
+                        "name": "Spotify",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "50",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/TpYgqWE5LcIUKbmHMmjkVC8VOWsf65.png",
+                                "type": "image",
+                                "name": "spotify-premium.png",
+                                "translations": [
+                                    {
+                                        "description": "Spotify",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_O-1657646",
+                        "name": "Xiaomi 14 (black)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657645",
+                        "name": "Apple iPhone 16 Pro 256 GB titan wüstensand",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657644",
+                        "name": "Samsung Galaxy S24 128 GB (cobalt violet)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    }
+                ],
+                "relatedEntities": [],
+                "position": 1,
+                "customerVisible": false,
+                "isOfferingPriceFromPCM": false,
+                "isBundle": false,
+                "isProduct": true
+            },
+            "filterCharacteristics": [
+                {
+                    "name": "telefonie_sms",
+                    "label": "Telefonie und SMS",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "Flat in alle deutschen Netze",
+                            "isDefault": false,
+                            "value": "2",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                },
+                {
+                    "name": "DataVolumePostpaid5GLTE",
+                    "label": "Highspeed-Volumen mit LTE und 5G",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "5 GB",
+                            "isDefault": false,
+                            "value": "1",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                }
+            ],
+            "characteristics": []
+        },
+        {
+            "productOffering": {
+                "group": "tariff",
+                "businessGroup": "TARIFF",
+                "associatedBusinessGroups": [],
+                "associatedBusinessProcesses": [],
+                "id": "MF_17254",
+                "name": "MagentaMobil Basic mit Premium-Plus-Smartphone",
+                "description": "<div><strong>Aktion</strong>: jetzt bestellen und <strong>120 € Cashback</strong> sichern<matrix-asterisk matrix-id=\"5NrogR\"></matrix-asterisk> (nur für Neukunden)<br /> </div>\n<div><strong>Internet</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>5 GB Highspeed-Volumen (mit LTE Max/5G)</li><li>Geschwindigkeit im Download: bis zu 300 MBit/s</li><li>Geschwindigkeit im Upload: bis zu 50 MBit/s</li><li>Nach Verbrauch des Highspeed-Volumens wird die Geschwindigkeit im jeweiligen Monat auf max. 64 KBit/s (Download) und 16 KBit/s (Upload) reduziert.</li></ul>\n<div><div><br /><strong>Inklusivleistungen</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Telefonie- und SMS-Flat in alle deutschen Netze:<br />Telefonieren Sie unbegrenzt ins deutsche Mobilfunk- und Festnetz und versenden Sie unbegrenzt SMS.</li><li>Hotspot Flat:<br />Mit einem Telekom HotSpot in Ihrer Nähe können Sie auch unterwegs surfen, ohne dabei das eigene Datenvolumen zu verbrauchen.<br />Mehr Infos unter <a href=\"https://www.hotspot.de\" style=\"color: #007faf\" target=\"blank\">www.hotspot.de</a></li><li>Roaming:<br />In der EU inkl. Schweiz & Großbritannien surfen und telefonieren Sie auf vorübergehenden Reisen ohne zusätzliche Kosten wie im Inland.</li></ul></div>\n<div><br /><strong>Tarife ohne Mindestlaufzeit</strong>\n<ul style=\"list-style-type: disc; margin-left: 14px\"><li>Infos zu Tarifen ohne Mindestlaufzeit, die lediglich ohne Gerät erhältlich sind, finden Sie unter www.telekom.de/flex-mobil oder in der Preisliste.</li></ul></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf\" style=\"color: #007faf\">Produktinformationsblatt (PDF)</a></div>\n<div><br /><a class=\"c-bw-link\" href=\"https://www.telekom.de/agb/direkt?AGBID=2199\" style=\"color: #007faf\">Preisliste, Leistungsbeschreibung und AGB</a></div></div></div>",
+                "shortDescription": "5 GB | LTE Max und 5G - 120 € Cashback sichern[ln:5NrogR]",
+                "restricted": false,
+                "characteristics": [
+                    {
+                        "name": "selectedProductOfferingTerm",
+                        "label": "Vertragslaufzeit",
+                        "valueType": "productOfferingTerm",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": true,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingTerm",
+                                "label": "24 Monate Vertragslaufzeit",
+                                "isDefault": true,
+                                "value": "agreement24"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "DataVolumePostpaid5GLTE",
+                        "label": "Highspeed-Volumen mit LTE und 5G",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "5 GB",
+                                "isDefault": false,
+                                "value": "1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "telefonie_sms",
+                        "label": "Telefonie und SMS",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "Flat in alle deutschen Netze",
+                                "isDefault": false,
+                                "value": "2"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "AGB_ID",
+                        "label": "Allgemeine Geschäftsbedingungen",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "2199",
+                                "isDefault": false,
+                                "value": "2199"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Data",
+                        "label": "Datenvolumen ",
+                        "valueType": "productOfferingBenefit",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "productOfferingBenefit",
+                                "label": "data",
+                                "isDefault": false,
+                                "value": "5"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "SMS",
+                        "label": "SMS ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "SMS",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "svGroup",
+                        "label": "svGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "svGroup",
+                                "isDefault": false,
+                                "value": "basic"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "subLevel",
+                        "label": "subLevel",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "subLevel",
+                                "isDefault": false,
+                                "value": "sub_40"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "Voice",
+                        "label": "Voice ohne Anzeige",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "voice",
+                                "isDefault": false,
+                                "value": "-1"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "familyCardEligible",
+                        "label": "familyCardEligible",
+                        "valueType": "boolean",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "boolean",
+                                "label": "familyCardEligible",
+                                "isDefault": false,
+                                "value": "true"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "productInformationSheet",
+                        "label": "sheet link download",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "Produktinformationsblatt (PDF)",
+                                "isDefault": false,
+                                "value": "https://www.telekom.de/produktinformationsblatt/magentamobil-basic.pdf"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "additionalShortDescription",
+                        "label": "Magenta1 Kurzbeschreibung",
+                        "valueType": "text",
+                        "isCustomerVisible": true,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G",
+                                "isDefault": false,
+                                "value": "5 GB + zusätzlich 1 Stunde täglich unbegrenzt surfen mit der Mobile Happy Hour | LTE Max und 5G"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardGroup",
+                        "label": "cardGroup",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardGroup",
+                                "isDefault": true,
+                                "value": "NMMAIN"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "cardType",
+                        "label": "cardType",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "cardType",
+                                "isDefault": true,
+                                "value": "adult"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "EUREG",
+                        "label": "Nutzungskontrolle Dataroaming ein",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "EUREG",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "VVMMBX",
+                        "label": "Mobilbox Pro",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "VVMMBX",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "IMSPDP",
+                        "label": "VoLTE und WLAN Call",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "IMSPDP",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "PBCROAM",
+                        "label": "Travel & Surf",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "PBCROAM",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "TNV3PNR_V",
+                        "label": "Teilnehmerverhältnis",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 1,
+                        "maxCardinality": 1,
+                        "entityType": "configuration",
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "TNV3PNR_V",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WLANDOFLAT",
+                        "label": "HotSpot Flat inklusive",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WLANDOFLAT",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1438",
+                        "label": "Datenflat Basic 5GB 5G",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1438",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    },
+                    {
+                        "name": "WNWPRO1450",
+                        "label": "Basic Roaming PK",
+                        "valueType": "text",
+                        "isCustomerVisible": false,
+                        "currencyCode": "",
+                        "configurable": false,
+                        "minCardinality": 0,
+                        "maxCardinality": 0,
+                        "characteristicValues": [
+                            {
+                                "valueType": "text",
+                                "label": "WNWPRO1450",
+                                "isDefault": true,
+                                "value": "addon"
+                            }
+                        ],
+                        "validationRules": []
+                    }
+                ],
+                "priority": 0,
+                "categories": [
+                    {
+                        "id": "MOBILEPOSTPAID",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "voice",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "smartphone-tarife",
+                        "entityType": "PresentationCategory"
+                    },
+                    {
+                        "id": "postpaid",
+                        "entityType": "Category"
+                    },
+                    {
+                        "id": "mobile",
+                        "entityType": "Category"
+                    }
+                ],
+                "channels": [
+                    {
+                        "id": "OneShop",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oneApp",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MagentaView",
+                        "characteristics": [
+                            {
+                                "name": "isSellableAcq",
+                                "value": false
+                            },
+                            {
+                                "name": "isInventoryVisible",
+                                "value": false
+                            }
+                        ]
+                    }
+                ],
+                "attachments": [],
+                "productOfferingPrices": [
+                    {
+                        "id": "MF_17254-OTC-Price",
+                        "name": "oneTimeTariffFee",
+                        "priceType": "activationFee",
+                        "entityType": "ProductOfferingPrice",
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 39.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    },
+                    {
+                        "id": "MF_17254-MRC-Price",
+                        "name": "monthlyTariffFee",
+                        "label": "Monatlich",
+                        "priceType": "recurringFee",
+                        "entityType": "ProductOfferingPrice",
+                        "recurringChargePeriod": "month",
+                        "recurringChargeDuration": 1,
+                        "recurringChargeOccurrence": -1,
+                        "validFor": {},
+                        "price": {
+                            "currencyCode": "EUR",
+                            "taxIncludedAmount": 64.95
+                        },
+                        "priceAlterations": [],
+                        "priceConditions": [],
+                        "characteristics": []
+                    }
+                ],
+                "productSpecificationRef": {
+                    "id": "MF_17254",
+                    "name": "MagentaMobil Basic mit Premium-Plus-Smartphone",
+                    "subscriberName": ""
+                },
+                "relatedProductOfferings": [],
+                "autoLinking": {
+                    "businessProcess": [],
+                    "mappedVariant": ""
+                },
+                "deliveryTime": "",
+                "associatedVariantIds": [],
+                "variantUSP": [],
+                "productOfferingGroups": [
+                    {
+                        "id": "MF_ParamountOptionen_0",
+                        "name": "Paramount+",
+                        "description": "",
+                        "shortDescription": "Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "40",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/QkqlPEbzkiciSAz0AvVTC39kBOpud1.png",
+                                "type": "image",
+                                "name": "paramount-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "ParamountOptionen",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_AppleTVOptionen_0",
+                        "name": "Apple TV+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "10",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/lrsOgQgIWMnjvdZlKl7mnxdVT87nhs.png",
+                                "type": "image",
+                                "name": "apple-tv-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Apple TV+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_NetflixOptionen_0",
+                        "name": "Netflix Optionen_0",
+                        "description": "Netflix Description",
+                        "shortDescription": "Netflix Short Description",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "30",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/hDF0sxrjrG30pOFq5obMFzI1Hp8TEQ.png",
+                                "type": "image",
+                                "name": "netflix.png",
+                                "translations": [
+                                    {
+                                        "description": "Netflix Optionen_0",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_DisneyOptionen_0",
+                        "name": "Disney+",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "20",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/3D2MA6fjG5hDKZb5MbSnRGVWmUQYuM.png",
+                                "type": "image",
+                                "name": "disney-plus.png",
+                                "translations": [
+                                    {
+                                        "description": "Disney+",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_SpotifyOptionen_0",
+                        "name": "Spotify",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "50",
+                        "attachments": [
+                            {
+                                "url": "https://dtdl-static-natco.eshop.yo-digital.com/resize-image?f=deuat2/TpYgqWE5LcIUKbmHMmjkVC8VOWsf65.png",
+                                "type": "image",
+                                "name": "spotify-premium.png",
+                                "translations": [
+                                    {
+                                        "description": "Spotify",
+                                        "locale": "en_US"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "MF_O-1657646",
+                        "name": "Xiaomi 14 (black)",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    },
+                    {
+                        "id": "MF_O-1657645",
+                        "name": "Apple iPhone 16 Pro 256 GB titan wüstensand",
+                        "description": "",
+                        "shortDescription": "",
+                        "minCardinality": 0,
+                        "maxCardinality": 1,
+                        "position": "0",
+                        "attachments": []
+                    }
+                ],
+                "relatedEntities": [],
+                "position": 1,
+                "customerVisible": false,
+                "isOfferingPriceFromPCM": false,
+                "isBundle": false,
+                "isProduct": true
+            },
+            "filterCharacteristics": [
+                {
+                    "name": "telefonie_sms",
+                    "label": "Telefonie und SMS",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "Flat in alle deutschen Netze",
+                            "isDefault": false,
+                            "value": "2",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                },
+                {
+                    "name": "DataVolumePostpaid5GLTE",
+                    "label": "Highspeed-Volumen mit LTE und 5G",
+                    "provideQuantity": false,
+                    "characteristicValues": [
+                        {
+                            "label": "5 GB",
+                            "isDefault": false,
+                            "value": "1",
+                            "quantity": 1
+                        }
+                    ],
+                    "booleanValueType": false
+                }
+            ],
+            "characteristics": []
+        }
+    ]
+}

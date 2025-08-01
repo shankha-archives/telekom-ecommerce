@@ -1,0 +1,9 @@
+id,name,price,duration,data,minutes,sms,features,popular
+<GENERATE_UUID>,MagentaMobil S,29.95,monthly,10GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling",True
+<GENERATE_UUID>,MagentaMobil M,39.95,monthly,20GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;StreamOn Music",True
+<GENERATE_UUID>,MagentaMobil L,49.95,monthly,unlimited,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;StreamOn Music&Video",True
+<GENERATE_UUID>,MagentaMobil XL,84.95,monthly,unlimited,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;StreamOn Premium;Priority Support",False
+<GENERATE_UUID>,MagentaZuhause M,34.95,monthly,50Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
+<GENERATE_UUID>,MagentaZuhause L,39.95,monthly,100Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
+MF_17249,MagentaMobil Basic,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17251,MagentaMobil Basic mit Smartphone,29.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True

@@ -1,0 +1,11 @@
+user_id,name,email,age,age_group,location,purchase_history,preferences,devices
+<GENERATE_UUID>,Lukas Müller,lukas.mueller@example.de,22,18-25,Berlin,"[\"MagentaMobil S\", \"Speedport Smart 4\"]","{\"theme\": \"dark\", \"language\": \"de\"}","[\"Speedport Smart 4\"]"
+<GENERATE_UUID>,Sophie Schneider,sophie.schneider@example.de,35,26-35,Hamburg,"[\"MagentaZuhause M\", \"MagentaTV Box\"]","{\"theme\": \"light\", \"language\": \"de\"}","[\"MagentaTV Box\"]"
+<GENERATE_UUID>,Fatima Yilmaz,fatima.yilmaz@example.de,29,26-35,Frankfurt,"[\"MagentaMobil M\"]","{\"theme\": \"dark\", \"language\": \"tr\"}","[\"Smart Home Hub 2\"]"
+<GENERATE_UUID>,Hans Bauer,hans.bauer@example.de,48,36-50,Munich,"[\"MagentaMobil XL\", \"MagentaZuhause L\"]","{\"theme\": \"light\", \"language\": \"de\"}","[\"Speedport Smart 4\", \"MagentaTV Box\"]"
+<GENERATE_UUID>,Anna Weber,anna.weber@example.de,61,51+,Cologne,"[\"MagentaMobil L\"]","{\"theme\": \"dark\", \"language\": \"de\"}","[\"MagentaTV Box\"]"
+<GENERATE_UUID>,Max Mustermann,max.mustermann@example.de,32,26-35,Berlin,"[\"MagentaMobil S\", \"Speedport Smart 4\"]","{\"theme\": \"light\", \"language\": \"de\"}","[\"Speedport Smart 4\"]"
+<GENERATE_UUID>,Maria Müller,maria.mueller@example.de,28,26-35,Hamburg,"[\"MagentaZuhause M\", \"MagentaTV Box\"]","{\"theme\": \"dark\", \"language\": \"de\"}","[\"MagentaTV Box\"]"
+<GENERATE_UUID>,Fatima Yilmaz,fatima.yilmaz@example.de,29,Frankfurt,"[\"MagentaMobil M\"]","{\"theme\": \"dark\", \"language\": \"tr\"}","[\"Smart Home Hub 2\"]"
+<GENERATE_UUID>,Hans Bauer,hans.bauer@example.de,48,Munich,"[\"MagentaMobil XL\", \"MagentaZuhause L\"]","{\"theme\": \"light\", \"language\": \"de\"}","[\"Speedport Smart 4\", \"MagentaTV Box\"]"
+<GENERATE_UUID>,Anna Weber,anna.weber@example.de,61,Cologne,"[\"MagentaMobil L\"]","{\"theme\": \"dark\", \"language\": \"de\"}","[\"MagentaTV Box\"]"
