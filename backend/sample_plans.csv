@@ -6,4 +6,9 @@ id,name,price,duration,data,minutes,sms,features,popular
 <GENERATE_UUID>,MagentaZuhause M,34.95,monthly,50Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
 <GENERATE_UUID>,MagentaZuhause L,39.95,monthly,100Mbit/s,unlimited,unlimited,"Home internet;Telekom HotSpot Flat;WLAN Router Included;Landline Flat",False
 MF_17249,MagentaMobil Basic,24.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
-MF_17251,MagentaMobil Basic mit Smartphone,29.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17251,MagentaMobil Basic mit Smartphone,34.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17252,MagentaMobil Basic mit Top-Smartphone,44.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17253,MagentaMobil Basic mit Premium-Smartphone,54.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+MF_17254,MagentaMobil Basic mit Premium-Plus-Smartphone,64.95,monthly,5GB,unlimited,unlimited,"EU roaming;5G;HotSpot Flat;VoLTE;Wi-Fi Calling;Cashback;StreamOn",True
+<GENERATE_UUID>,Data Pass 5GB,9.99,one-time,5GB,N/A,N/A,"High-speed data;Valid for 30 days;EU roaming",False
+<GENERATE_UUID>,Music Streaming Pass,5.99,monthly,Unlimited,N/A,N/A,"Ad-free music;Unlimited skips;Offline listening",False
