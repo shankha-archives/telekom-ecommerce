@@ -76,10 +76,12 @@ class CartItem(BaseModel):
 class SearchRequest(BaseModel):
     query: str
     session_id: Optional[str] = None
+    user_id: Optional[str] = None  # Added for personalized recommendations
 
 class VoiceRequest(BaseModel):
     text: str
     session_id: Optional[str] = None
+    user_id: Optional[str] = None  # Added for personalized recommendations
     language: str = "en"  # en or hi
     last_search_results: Optional[Dict] = None
     chat_history: Optional[List[Dict]] = None
@@ -90,6 +92,8 @@ plans_store = []
 
 # Sample data
 import csv
+import user_profile_utils
+import llm_recommendation_logger
 
 def load_devices_from_csv(csv_path):
     devices = []
@@ -194,6 +198,11 @@ async def get_plan(plan_id: str):
 
 @app.post("/api/search")
 async def smart_search(request: SearchRequest):
+    # Load user profile if user_id is provided
+    user_profile = None
+    if hasattr(request, 'user_id') and request.user_id:
+        user_profile = user_profile_utils.get_user_profile(request.user_id)
+    # Add user profile to context for logging
     """Smart LLM-powered search for devices and plans"""
     try:
         if not OPENAI_API_KEY:
@@ -301,6 +310,14 @@ Focus on understanding user intent (budget, usage patterns, preferences) and mat
                 if plan:
                     recommended_plans.append(plan)
             
+            # Log LLM recommendation with user profile and context
+            llm_recommendation_logger.log_llm_recommendation(
+                user_id=request.user_id if hasattr(request, 'user_id') else None,
+                user_profile=user_profile,
+                llm_input={"query": request.query},
+                llm_response=llm_result,
+                context={"devices": devices, "plans": plans, "user_profile": user_profile}
+            )
             return {
                 "devices": recommended_devices,
                 "plans": recommended_plans,
@@ -322,13 +339,19 @@ Focus on understanding user intent (budget, usage patterns, preferences) and mat
 
 @app.post("/api/voice-search")
 async def voice_search(request: VoiceRequest):
+    # Load user profile if user_id is provided
+    user_profile = None
+    if hasattr(request, 'user_id') and request.user_id:
+        user_profile = user_profile_utils.get_user_profile(request.user_id)
+    # Add user profile to context for logging
     """Voice assistant for search and conversation with context"""
     try:
         if not OPENAI_API_KEY:
             return {
                 "response": f"I heard: '{request.text}'. Voice assistant requires API key configuration.",
                 "action": "none",
-                "data": {}
+                "data": {},
+                "language": request.language
             }
         
         # Get context data
@@ -412,18 +435,10 @@ Always respond in JSON format:
     "language": "{request.language}"
 }}
 
-Be conversational, helpful, and contextually aware. When you correct speech recognition errors, briefly mention what you understood (e.g., "I understood you're looking for the S plan...")."""
+Be conversational, helpful, and contextually aware. When you correct speech recognition errors, briefly mention what you understood (e.g., "I understood you're looking for iPhones")."""
         
-        # Send request to OpenAI
+        # Send user query to OpenAI
         client = get_openai_client()
-        if not client:
-            return {
-                "response": f"I heard: '{request.text}'. Voice assistant requires API key configuration.",
-                "action": "none",
-                "data": {},
-                "language": request.language
-            }
-            
         response = await client.chat.completions.create(
             model=LLM_MODEL,
             messages=[
@@ -434,13 +449,22 @@ Be conversational, helpful, and contextually aware. When you correct speech reco
             max_tokens=1000
         )
         
-        import json
+        # Parse LLM response
+        response_content = response.choices[0].message.content
         try:
-            response_content = response.choices[0].message.content
             result = json.loads(response_content)
             
-            # Process search results if action is search
-            if result.get("action") == "search" and result.get("data"):
+            # If LLM doesn't return structured data, create a simple response
+            if "response" not in result or "action" not in result:
+                result = {
+                    "response": response_content,
+                    "action": "none",
+                    "data": {},
+                    "language": request.language
+                }
+            
+            # If action is search, but no data, do a fallback search
+            if result.get("action") == "search" and not result.get("data", {}).get("recommended_devices") and not result.get("data", {}).get("recommended_plans"):
                 # Find matching devices and plans
                 recommended_devices = []
                 recommended_plans = []
@@ -468,6 +492,26 @@ Be conversational, helpful, and contextually aware. When you correct speech reco
                 result["data"]["recommended_devices"] = recommended_devices
                 result["data"]["recommended_plans"] = recommended_plans
             
+            # Log LLM recommendation with user profile and context
+            llm_recommendation_logger.log_llm_recommendation(
+                user_id=request.user_id if hasattr(request, 'user_id') else None,
+                user_profile=user_profile,
+                llm_input={
+                    "text": request.text,
+                    "chat_history": request.chat_history,
+                    "last_search_results": request.last_search_results,
+                    "language": request.language
+                },
+                llm_response=result,
+                context={
+                    "devices": devices,
+                    "plans": plans,
+                    "user_profile": user_profile,
+                    "session_id": session_id,
+                    "conversation_context": conversation_context,
+                    "search_results_context": search_results_context
+                }
+            )
             return result
         except json.JSONDecodeError:
             return {
