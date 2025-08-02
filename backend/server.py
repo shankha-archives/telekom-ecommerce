@@ -17,6 +17,7 @@ import recommendation_engine
 import user_profile_utils
 import llm_recommendation_logger
 import enhanced_api
+from knowledge_base import initialize_knowledge_base
 
 load_dotenv()
 
@@ -175,6 +176,25 @@ async def startup_event():
         await enhanced_api.setup_enhanced_routes(app, devices_store, plans_store)
         print("✅ Enhanced API routes configured")
         
+        # Initialize Enhanced RAG system with tariff data
+        try:
+            # Initialize enhanced knowledge base with both listing.json and tariff 1.json
+            kb_success = initialize_knowledge_base("listing.json", "tariff 1.json")
+            if kb_success:
+                print("✅ Enhanced knowledge base initialized successfully (listing + tariff data)")
+            else:
+                print("⚠️  Enhanced knowledge base initialization failed")
+            
+            # Initialize semantic search with loaded data
+            rag_success = recommendation_engine.initialize_rag_system(devices_store, plans_store)
+            if rag_success:
+                print("✅ Enhanced RAG system initialized successfully with tariff integration")
+            else:
+                print("⚠️  RAG system initialization failed - falling back to basic recommendations")
+        except Exception as e:
+            print(f"⚠️  Enhanced RAG initialization error: {e}")
+            print("⚠️  Continuing with basic recommendations")
+        
         print("✅ Application initialized successfully")
     except Exception as e:
         print(f"❌ Application initialization error: {e}")
@@ -271,7 +291,7 @@ async def smart_search(request: SearchRequest):
         # Use our recommendation engine to generate weighted recommendations
         print(f"DEBUG: Calling recommendation engine")
         try:
-            recommendations = recommendation_engine.generate_weighted_recommendations(
+            recommendations = recommendation_engine.generate_rag_enhanced_recommendations(
                 session_data, 
                 devices, 
                 plans, 
@@ -543,7 +563,7 @@ Be conversational, helpful, and contextually aware. When you correct speech reco
             # If action is search but no recommendations, use our recommendation engine
             if result.get("action") == "search" and not result.get("data", {}).get("recommended_devices") and not result.get("data", {}).get("recommended_plans"):
                 # Use weighted recommendation algorithm
-                recommendations = recommendation_engine.generate_weighted_recommendations(
+                recommendations = recommendation_engine.generate_rag_enhanced_recommendations(
                     session_data,
                     devices,
                     plans,
@@ -664,6 +684,137 @@ async def chat_endpoint(request: ChatRequest):
         # Add search query to session
         session_manager.add_search_query(session_id, request.message)
         
+        # Check for cart-related voice commands - expanded intent detection
+        cart_keywords = [
+            'add to cart', 'add this to cart', 'i want this', 'buy this', 'purchase this', 'get this',
+            'i choose this', 'i choose that', 'choose this', 'choose that', 'i select this', 'select this',
+            'i take this', 'take this', 'i pick this', 'pick this', 'i go with this', 'go with this',
+            'i want that', 'want this', 'want that', 'take that', 'pick that', 'select that',
+            'yes add', 'add it', 'get it', 'buy it', 'purchase it', 'i\'ll take it', 'i will take it',
+            'sounds good', 'looks good', 'perfect', 'that works', 'that\'s good', 'that\'s perfect',
+            'ok i choose', 'okay i choose', 'alright i choose', 'sure i choose', 'yes i choose'
+        ]
+        message_lower = request.message.lower()
+        
+        if any(keyword in message_lower for keyword in cart_keywords):
+            # Extract item information from recent conversation context
+            recent_recommendations = session_data.get('conversation_history', [])
+            last_assistant_message = None
+            
+            # Find the last assistant message with recommendations
+            for msg in reversed(recent_recommendations):
+                if msg.get('type') == 'assistant' and msg.get('recommendations'):
+                    last_assistant_message = msg
+                    break
+            
+            if last_assistant_message and last_assistant_message.get('recommendations'):
+                # Try to identify which item the user wants to add
+                recommendations = last_assistant_message.get('recommendations', {})
+                devices = recommendations.get('devices', [])
+                plans = recommendations.get('plans', [])
+                
+                # Enhanced item selection logic
+                item_to_add = None
+                item_type = None
+                
+                # Check if user is referring to a specific item type
+                if 'plan' in message_lower and plans:
+                    item_to_add = plans[0]  # Take first plan if multiple
+                    item_type = 'plan'
+                elif 'device' in message_lower and devices:
+                    item_to_add = devices[0]  # Take first device if multiple
+                    item_type = 'device'
+                elif 'phone' in message_lower and devices:
+                    item_to_add = devices[0]
+                    item_type = 'device'
+                elif plans and len(plans) == 1:
+                    # If only one plan was recommended, assume they mean that one
+                    item_to_add = plans[0]
+                    item_type = 'plan'
+                elif devices and len(devices) == 1:
+                    # If only one device was recommended, assume they mean that one
+                    item_to_add = devices[0]
+                    item_type = 'device'
+                elif plans:
+                    # Default to plan if available (since plans are more commonly chosen via voice)
+                    item_to_add = plans[0]
+                    item_type = 'plan'
+                elif devices:
+                    # Fall back to device
+                    item_to_add = devices[0]
+                    item_type = 'device'
+                
+                if item_to_add and item_type:
+                    try:
+                        # Add item to cart
+                        add_request = AddToCartRequest(
+                            session_id=session_id,
+                            item_id=item_to_add.get('id'),
+                            item_type=item_type,
+                            quantity=1,
+                            voice_command=request.message
+                        )
+                        cart_result = await add_to_cart(add_request)
+                        
+                        # Return cart confirmation with navigation action
+                        return {
+                            "response": f"Perfect! I've added the {item_to_add.get('name')} to your cart. Let me show you your cart now.",
+                            "session_id": session_id,
+                            "cart_action": True,
+                            "navigate_to_cart": True,  # Signal frontend to navigate to cart
+                            "cart_summary": cart_result['cart_summary'],
+                            "cart_items": [{
+                                "id": item_to_add.get('id'),
+                                "name": item_to_add.get('name'),
+                                "price": item_to_add.get('price'),
+                                "type": item_type
+                            }],
+                            "voice_confirmation": cart_result['voice_confirmation'],
+                            "recommendations": {"devices": [], "plans": []},
+                            "explanations": {"device_explanations": {}, "plan_explanations": {}},
+                            "follow_up_questions": ["Would you like to proceed to checkout?", "Continue shopping?"],
+                            "preference_summary": []
+                        }
+                    except Exception as e:
+                        print(f"Voice cart add error: {str(e)}")
+                        # Continue with normal chat flow if cart add fails
+        
+        # Check for cart navigation commands
+        cart_navigation_keywords = [
+            'show my cart', 'show cart', 'view cart', 'what\'s in my cart', 'go to cart',
+            'take me to cart', 'open cart', 'see my cart', 'check my cart', 'cart contents',
+            'my shopping cart', 'shopping cart', 'what did i add', 'what have i added',
+            'proceed to checkout', 'checkout', 'buy now', 'complete purchase'
+        ]
+        
+        if any(keyword in message_lower for keyword in cart_navigation_keywords):
+            # Get current cart state
+            cart_data = await get_cart(session_id)
+            
+            if cart_data.get('total_items', 0) > 0:
+                return {
+                    "response": f"Here's your cart! You have {cart_data['total_items']} item(s) totaling €{cart_data['total_price']:.2f}. Let me show you the details.",
+                    "session_id": session_id,
+                    "navigate_to_cart": True,
+                    "cart_summary": cart_data,
+                    "voice_confirmation": f"Your cart has {cart_data['total_items']} items",
+                    "recommendations": {"devices": [], "plans": []},
+                    "explanations": {"device_explanations": {}, "plan_explanations": {}},
+                    "follow_up_questions": ["Would you like to proceed to checkout?", "Continue shopping?", "Remove any items?"],
+                    "preference_summary": []
+                }
+            else:
+                return {
+                    "response": "Your cart is currently empty. Would you like me to help you find some devices or plans?",
+                    "session_id": session_id,
+                    "navigate_to_cart": False,
+                    "voice_confirmation": "Your cart is empty",
+                    "recommendations": {"devices": [], "plans": []},
+                    "explanations": {"device_explanations": {}, "plan_explanations": {}},
+                    "follow_up_questions": ["Show me devices under €500", "Recommend plans under €50", "What's popular today?"],
+                    "preference_summary": []
+                }
+        
         if not OPENAI_API_KEY:
             # Fallback if no API key - use simple search
             search_request = SearchRequest(query=request.message, session_id=session_id)
@@ -780,7 +931,7 @@ Be conversational, helpful, and provide specific product recommendations when re
                 any(keyword in request.message.lower() for keyword in ['find', 'search', 'recommend', 'suggest', 'want', 'need', 'looking', 'show'])):
                 
                 # Use weighted recommendation algorithm
-                recommendations = recommendation_engine.generate_weighted_recommendations(
+                recommendations = recommendation_engine.generate_rag_enhanced_recommendations(
                     session_data,
                     devices,
                     plans,
@@ -862,7 +1013,8 @@ Be conversational, helpful, and provide specific product recommendations when re
 @app.get("/api/session/{session_id}")
 async def get_session_data(session_id: str):
     """Get session data for the frontend"""
-    session_data = session_manager.get_session(session_id)
+    # Try to get existing session, or create one if it doesn't exist
+    session_id, session_data = session_manager.get_or_create_session(session_id)
     if not session_data:
         raise HTTPException(status_code=404, detail="Session not found or expired")
     
@@ -923,6 +1075,248 @@ async def update_session_preferences(session_id: str, request: PreferenceUpdateR
         )
     }
 
+# Cart Management Models
+class CartItem(BaseModel):
+    id: str
+    type: str  # 'device', 'plan', 'bundle'
+    name: str
+    price: float
+    original_price: Optional[float] = None
+    quantity: int = 1
+    bundle_components: Optional[List[Dict]] = None
+    compatibility_checks: Optional[Dict] = None
+
+class AddToCartRequest(BaseModel):
+    session_id: str
+    item_id: str
+    item_type: str  # 'device', 'plan', 'bundle'
+    quantity: int = 1
+    voice_command: Optional[str] = None
+
+class UpdateCartRequest(BaseModel):
+    session_id: str
+    item_id: str
+    quantity: int
+
+@app.post("/api/cart/add")
+async def add_to_cart(request: AddToCartRequest):
+    """Add item to cart with voice command support"""
+    try:
+        # Get session data
+        session_id, session_data = session_manager.get_or_create_session(request.session_id)
+        
+        # Find the item based on type
+        item = None
+        if request.item_type == 'device':
+            item = next((d for d in devices_store if d.get('id') == request.item_id), None)
+        elif request.item_type == 'plan':
+            item = next((p for p in plans_store if p.get('id') == request.item_id), None)
+        elif request.item_type == 'bundle':
+            # Handle bundle logic (device + plan combination)
+            # For now, treat as device with plan attached
+            item = next((d for d in devices_store if d.get('id') == request.item_id), None)
+        
+        if not item:
+            raise HTTPException(status_code=404, detail=f"{request.item_type.capitalize()} not found")
+        
+        # Initialize cart if not exists
+        if 'cart' not in session_data:
+            session_data['cart'] = []
+        
+        # Check if item already in cart
+        existing_item = next((cart_item for cart_item in session_data['cart'] 
+                            if cart_item.get('id') == request.item_id and cart_item.get('type') == request.item_type), None)
+        
+        if existing_item:
+            # Update quantity
+            existing_item['quantity'] += request.quantity
+        else:
+            # Add new item to cart
+            cart_item = {
+                'id': request.item_id,
+                'type': request.item_type,
+                'name': item.get('name', ''),
+                'price': float(item.get('price', 0)),
+                'original_price': float(item.get('original_price', item.get('price', 0))),
+                'quantity': request.quantity,
+                'bundle_components': [],
+                'compatibility_checks': {}
+            }
+            
+            # Add bundle logic if needed
+            if request.item_type == 'bundle':
+                cart_item['bundle_components'] = [
+                    {'type': 'device', 'name': item.get('name', ''), 'price': float(item.get('price', 0))}
+                ]
+            
+            session_data['cart'].append(cart_item)
+        
+        # Update session
+        session_manager.update_session(session_id, session_data)
+        
+        # Calculate cart totals
+        cart_total = sum(item.get('price', 0) * item.get('quantity', 1) for item in session_data['cart'])
+        cart_count = sum(item.get('quantity', 1) for item in session_data['cart'])
+        
+        # Prepare response
+        response = {
+            'success': True,
+            'message': f"{item.get('name', 'Item')} added to cart",
+            'cart_item': cart_item if not existing_item else existing_item,
+            'cart_summary': {
+                'total_items': cart_count,
+                'total_price': cart_total,
+                'items': session_data['cart']
+            },
+            'voice_confirmation': f"{item.get('name', 'Item')} added to your cart"
+        }
+        
+        # Add voice command context if provided
+        if request.voice_command:
+            response['voice_command_processed'] = request.voice_command
+        
+        return response
+    
+    except Exception as e:
+        print(f"Add to cart error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to add item to cart: {str(e)}")
+
+@app.get("/api/cart/{session_id}")
+async def get_cart(session_id: str):
+    """Get cart contents for session"""
+    try:
+        session_data = session_manager.get_session(session_id)
+        if not session_data:
+            return {'cart': [], 'total_items': 0, 'total_price': 0}
+        
+        cart = session_data.get('cart', [])
+        cart_total = sum(item.get('price', 0) * item.get('quantity', 1) for item in cart)
+        cart_count = sum(item.get('quantity', 1) for item in cart)
+        
+        return {
+            'cart': cart,
+            'total_items': cart_count,
+            'total_price': cart_total,
+            'session_id': session_id
+        }
+    
+    except Exception as e:
+        print(f"Get cart error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get cart: {str(e)}")
+
+@app.put("/api/cart/update")
+async def update_cart_item(request: UpdateCartRequest):
+    """Update cart item quantity"""
+    try:
+        session_data = session_manager.get_session(request.session_id)
+        if not session_data:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        cart = session_data.get('cart', [])
+        item = next((cart_item for cart_item in cart if cart_item.get('id') == request.item_id), None)
+        
+        if not item:
+            raise HTTPException(status_code=404, detail="Item not found in cart")
+        
+        if request.quantity <= 0:
+            # Remove item from cart
+            cart.remove(item)
+            message = f"{item.get('name', 'Item')} removed from cart"
+        else:
+            # Update quantity
+            item['quantity'] = request.quantity
+            message = f"{item.get('name', 'Item')} quantity updated"
+        
+        # Update session
+        session_manager.update_session(request.session_id, session_data)
+        
+        # Calculate new totals
+        cart_total = sum(item.get('price', 0) * item.get('quantity', 1) for item in cart)
+        cart_count = sum(item.get('quantity', 1) for item in cart)
+        
+        return {
+            'success': True,
+            'message': message,
+            'cart_summary': {
+                'total_items': cart_count,
+                'total_price': cart_total,
+                'items': cart
+            }
+        }
+    
+    except Exception as e:
+        print(f"Update cart error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to update cart: {str(e)}")
+
+@app.delete("/api/cart/{session_id}/clear")
+async def clear_cart(session_id: str):
+    """Clear all items from cart"""
+    try:
+        session_data = session_manager.get_session(session_id)
+        if not session_data:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        session_data['cart'] = []
+        session_manager.update_session(session_id, session_data)
+        
+        return {
+            'success': True,
+            'message': 'Cart cleared',
+            'cart_summary': {
+                'total_items': 0,
+                'total_price': 0,
+                'items': []
+            }
+        }
+    
+    except Exception as e:
+        print(f"Clear cart error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to clear cart: {str(e)}")
+
+@app.post("/api/cart/compatibility-check")
+async def check_compatibility(request: dict):
+    """Check compatibility between devices and plans"""
+    try:
+        device_id = request.get('device_id')
+        plan_id = request.get('plan_id')
+        
+        device = next((d for d in devices_store if d.get('id') == device_id), None)
+        plan = next((p for p in plans_store if p.get('id') == plan_id), None)
+        
+        if not device or not plan:
+            raise HTTPException(status_code=404, detail="Device or plan not found")
+        
+        # Basic compatibility checks
+        compatibility = {
+            'compatible': True,
+            'warnings': [],
+            'recommendations': []
+        }
+        
+        # Check network compatibility
+        device_features = device.get('features', '').split(';')
+        plan_features = plan.get('features', '').split(';')
+        
+        has_5g_device = any('5G' in feature for feature in device_features)
+        has_5g_plan = any('5G' in feature for feature in plan_features)
+        
+        if has_5g_plan and not has_5g_device:
+            compatibility['warnings'].append("This plan includes 5G, but your device doesn't support 5G")
+        
+        if not has_5g_plan and has_5g_device:
+            compatibility['recommendations'].append("Consider upgrading to a 5G plan to use your device's full potential")
+        
+        # Check eSIM compatibility
+        has_esim_device = any('eSIM' in feature for feature in device_features)
+        if has_esim_device:
+            compatibility['recommendations'].append("This device supports eSIM for easy activation")
+        
+        return compatibility
+    
+    except Exception as e:
+        print(f"Compatibility check error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Compatibility check failed: {str(e)}")
+
 @app.get("/api/featured-devices")
 async def get_featured_devices(session_id: Optional[str] = None):
     """Get featured devices for homepage"""
@@ -931,7 +1325,7 @@ async def get_featured_devices(session_id: Optional[str] = None):
         session_data = session_manager.get_session(session_id)
         if session_data and session_data.get('user_preferences'):
             # Use recommendation engine for personalized featured devices
-            recommendations = recommendation_engine.generate_weighted_recommendations(
+            recommendations = recommendation_engine.generate_rag_enhanced_recommendations(
                 session_data,
                 devices_store,
                 [],  # No plans needed for featured devices
@@ -953,7 +1347,7 @@ async def get_popular_plans(session_id: Optional[str] = None):
         session_data = session_manager.get_session(session_id)
         if session_data and session_data.get('user_preferences'):
             # Use recommendation engine for personalized popular plans
-            recommendations = recommendation_engine.generate_weighted_recommendations(
+            recommendations = recommendation_engine.generate_rag_enhanced_recommendations(
                 session_data,
                 [],  # No devices needed for popular plans
                 plans_store,

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './com
 import { Badge } from './components/ui/badge';
 import { Mic, MicOff, Search, ShoppingCart, Star, Phone, Smartphone, Wifi, CheckCircle, X, MessageCircle, RotateCcw } from 'lucide-react';
 import ModernChatInterface from './components/ModernChatInterface';
+import BundleRecommendations from './components/BundleRecommendations';
 import sessionSync from './utils/SessionSync';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
@@ -39,12 +40,29 @@ function App() {
       setSessionId(sid);
       console.log(`Session initialized with ID: ${sid}`);
       
+      // Fetch initial cart state
+      await fetchCartStateWithId(sid);
+      
       // Fetch data and initialize speech
       fetchAllData();
       initializeSpeechRecognition();
     }
     
     initializeApp();
+
+    // Add global cleanup for speech recognition
+    const handleBeforeUnload = () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+          recognitionRef.current.abort();
+        } catch (error) {
+          console.log('Error stopping speech recognition on unload:', error);
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
     
     // Add click outside listener to close chat
     const handleClickOutside = (event) => {
@@ -59,7 +77,17 @@ function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       sessionSync.cleanup();
+      // Cleanup speech recognition
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+          recognitionRef.current.abort();
+        } catch (error) {
+          console.log('Error cleaning up speech recognition:', error);
+        }
+      }
     };
   }, [isChatExpanded]);
 
@@ -135,15 +163,38 @@ function App() {
     }
 
     if (isListening) {
-      recognitionRef.current?.stop();
+      // Stop current recognition
+      try {
+        recognitionRef.current?.stop();
+      } catch (error) {
+        console.log('Error stopping recognition:', error);
+      }
       setIsListening(false);
       setIsInConversationMode(false);
     } else {
       if (recognitionRef.current) {
-        recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
-        recognitionRef.current.start();
-        setIsListening(true);
-        setIsInConversationMode(true); // Enable conversation mode
+        try {
+          // Always stop first to ensure clean state
+          recognitionRef.current.stop();
+        } catch (error) {
+          // Ignore errors when stopping (might not be running)
+        }
+        
+        try {
+          // Small delay to ensure stop is processed
+          setTimeout(() => {
+            if (recognitionRef.current && !isListening) {
+              recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+              recognitionRef.current.start();
+              setIsListening(true);
+              setIsInConversationMode(true);
+            }
+          }, 100);
+        } catch (error) {
+          console.error('Error starting recognition:', error);
+          setIsListening(false);
+          setIsInConversationMode(false);
+        }
       } else {
         alert('Speech recognition not supported in your browser');
       }
@@ -151,15 +202,27 @@ function App() {
   };
 
   const startListeningAfterResponse = () => {
-    if (isInConversationMode && !isChatMinimized) {
+    if (isInConversationMode && !isChatMinimized && !isListening) {
       setTimeout(() => {
-        if (recognitionRef.current && isInConversationMode) {
+        if (recognitionRef.current && isInConversationMode && !isListening) {
           try {
-            recognitionRef.current.start();
-            setIsListening(true);
+            // Ensure clean state before starting
+            recognitionRef.current.stop();
           } catch (error) {
-            console.error('Error restarting recognition:', error);
+            // Ignore stop errors
           }
+          
+          setTimeout(() => {
+            if (recognitionRef.current && isInConversationMode && !isListening) {
+              try {
+                recognitionRef.current.start();
+                setIsListening(true);
+              } catch (error) {
+                console.error('Error restarting recognition:', error);
+                setIsListening(false);
+              }
+            }
+          }, 100); // Small delay after stop
         }
       }, 1000); // 1 second delay
     }
@@ -239,11 +302,24 @@ function App() {
         }
       }
       
-      // Handle cart actions
-      if (result.cart_items && result.cart_items.length > 0) {
+      // Handle cart actions - only if not already processed by backend
+      if (result.cart_items && result.cart_items.length > 0 && !result.cart_action) {
         result.cart_items.forEach(item => {
           addToCart(item, item.type);
         });
+      } else if (result.cart_action && result.cart_summary) {
+        // Cart was already processed by backend, just refresh our cart state
+        await fetchCartState();
+      }
+      
+      // Handle cart navigation
+      if (result.navigate_to_cart) {
+        // Wait a moment for the cart state to update, then navigate
+        setTimeout(() => {
+          setCurrentView('cart');
+          // Close chat to show cart clearly
+          setIsChatExpanded(false);
+        }, 1000);
       }
       
       // Speak the response with smart content
@@ -338,33 +414,103 @@ function App() {
     }
   };
 
-  const addToCart = (item, type) => {
-    const cartItem = {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      type: type,
-      image: item.image || null
-    };
-    setCart([...cart, cartItem]);
+  const fetchCartStateWithId = async (sid) => {
+    if (!sid) return;
     
-    // Track conversion event
-    sessionSync.trackConversion({
-      item_id: item.id,
-      item_type: type,
-      item_data: item,
-      conversion_step: 'add_to_cart'
-    });
-    
-    // Add confirmation message to chat if chat is expanded
-    if (isChatExpanded) {
-      const confirmMessage = {
-        type: 'assistant',
-        message: `✅ Added ${item.name} to your cart!`,
-        timestamp: new Date().toISOString()
-      };
-      setChatHistory(prev => [...prev, confirmMessage]);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/cart/${sid}`);
+      const cartData = await response.json();
+      
+      if (cartData.cart) {
+        // Convert backend cart format to frontend format
+        const frontendCart = cartData.cart.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          type: item.type,
+          image: item.image || null
+        }));
+        setCart(frontendCart);
+      }
+    } catch (error) {
+      console.error('Failed to fetch cart state:', error);
     }
+  };
+
+  const fetchCartState = async () => {
+    return fetchCartStateWithId(sessionId);
+  };
+
+  const addToCart = async (item, type) => {
+    if (!sessionId || !item?.id) {
+      console.error('Session or item not available');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/cart/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          item_id: item.id,
+          item_type: type,
+          quantity: 1
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // Update cart state with backend response
+        await fetchCartState();
+        
+        // Track conversion event
+        sessionSync.trackConversion({
+          item_id: item.id,
+          item_type: type,
+          item_data: item,
+          conversion_step: 'add_to_cart'
+        });
+        
+        // Add confirmation message to chat if chat is expanded
+        if (isChatExpanded) {
+          const confirmMessage = {
+            type: 'assistant',
+            message: `✅ Added ${item.name} to your cart!`,
+            timestamp: new Date().toISOString()
+          };
+          setChatHistory(prev => [...prev, confirmMessage]);
+        }
+
+        // Voice confirmation if supported
+        if ('speechSynthesis' in window && result.voice_confirmation) {
+          const utterance = new SpeechSynthesisUtterance(result.voice_confirmation);
+          utterance.rate = 0.8;
+          utterance.volume = 0.7;
+          speechSynthesis.speak(utterance);
+        }
+      } else {
+        throw new Error(result.message || 'Failed to add to cart');
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      // Show error message to user
+      if (isChatExpanded) {
+        const errorMessage = {
+          type: 'assistant',
+          message: `Sorry, I couldn't add ${item.name} to your cart. Please try again.`,
+          timestamp: new Date().toISOString()
+        };
+        setChatHistory(prev => [...prev, errorMessage]);
+      }
+    }
+  };
+
+  const handleCartUpdate = async (cartSummary) => {
+    // Refresh cart state when notified of updates
+    await fetchCartState();
+    console.log('Cart updated:', cartSummary);
   };
 
   const DeviceCard = ({ device, showInChat = false }) => (
@@ -537,6 +683,19 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Bundle Recommendations */}
+      {sessionId && (
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <BundleRecommendations
+              sessionId={sessionId}
+              apiBaseUrl={BACKEND_URL}
+              onCartUpdate={handleCartUpdate}
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 

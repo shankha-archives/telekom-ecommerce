@@ -21,12 +21,17 @@ const ChatContextIndicator = ({ session }) => {
 
   // Add device preferences to context items
   const devicePreferences = session?.user_preferences?.device_preferences || {};
-  if (devicePreferences.brand?.length > 0) {
-    contextItems.push({
-      type: 'brand',
-      text: `Brand: ${devicePreferences.brand.join(', ')}`,
-      icon: <Filter className="w-3 h-3 text-blue-600" />
-    });
+  if (devicePreferences.brand) {
+    const brands = Array.isArray(devicePreferences.brand) 
+      ? devicePreferences.brand 
+      : [devicePreferences.brand];
+    if (brands.length > 0 && brands[0]) {
+      contextItems.push({
+        type: 'brand',
+        text: `Brand: ${brands.join(', ')}`,
+        icon: <Filter className="w-3 h-3 text-blue-600" />
+      });
+    }
   }
 
   if (devicePreferences.price_range) {
@@ -38,20 +43,30 @@ const ChatContextIndicator = ({ session }) => {
     });
   }
 
-  if (devicePreferences.storage?.length > 0) {
-    contextItems.push({
-      type: 'storage',
-      text: `Storage: ${devicePreferences.storage.join(', ')}`,
-      icon: <Database className="w-3 h-3 text-blue-600" />
-    });
+  if (devicePreferences.storage) {
+    const storageOptions = Array.isArray(devicePreferences.storage) 
+      ? devicePreferences.storage 
+      : [devicePreferences.storage];
+    if (storageOptions.length > 0 && storageOptions[0]) {
+      contextItems.push({
+        type: 'storage',
+        text: `Storage: ${storageOptions.join(', ')}`,
+        icon: <Database className="w-3 h-3 text-blue-600" />
+      });
+    }
   }
 
-  if (devicePreferences.color?.length > 0) {
-    contextItems.push({
-      type: 'color',
-      text: `Color: ${devicePreferences.color.join(', ')}`,
-      icon: <Filter className="w-3 h-3 text-blue-600" />
-    });
+  if (devicePreferences.color) {
+    const colorOptions = Array.isArray(devicePreferences.color) 
+      ? devicePreferences.color 
+      : [devicePreferences.color];
+    if (colorOptions.length > 0 && colorOptions[0]) {
+      contextItems.push({
+        type: 'color',
+        text: `Color: ${colorOptions.join(', ')}`,
+        icon: <Filter className="w-3 h-3 text-blue-600" />
+      });
+    }
   }
 
   // Add plan preferences to context items

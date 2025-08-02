@@ -56,7 +56,8 @@ def get_or_create_session(session_id=None):
                     'plans': {}
                 },
                 'search_queries': [],
-                'inferred_needs': {}
+                'inferred_needs': {},
+                'cart': []
             }
             
             return session_id, session_store[session_id]
@@ -72,7 +73,8 @@ def get_or_create_session(session_id=None):
             'conversation_history': [],
             'user_preferences': {'device_preferences': {}, 'plan_preferences': {}},
             'viewed_items': {'devices': {}, 'plans': {}},
-            'search_queries': []
+            'search_queries': [],
+            'cart': []
         }
 
 def update_session(session_id, update_data):
@@ -91,6 +93,9 @@ def update_session(session_id, update_data):
                     # Otherwise, replace the value
                     else:
                         session_store[session_id][key] = value
+                else:
+                    # Add new key if it doesn't exist
+                    session_store[session_id][key] = value
             
             return True
     return False

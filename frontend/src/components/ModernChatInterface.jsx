@@ -5,6 +5,7 @@ import { Mic, MicOff, Send, RotateCcw, X, Minus, MessageCircle } from 'lucide-re
 import EnhancedChatMessage from './EnhancedChatMessage';
 import UserPreferenceManager from './UserPreferenceManager';
 import ChatContextIndicator from './ChatContextIndicator';
+import CartPreview from './CartPreview';
 
 /**
  * ModernChatInterface Component
@@ -30,6 +31,8 @@ const ModernChatInterface = ({
   const [isTyping, setIsTyping] = useState(false);
   const [session, setSession] = useState(null);
   const [explanations, setExplanations] = useState({});
+  const [cartPreviewOpen, setCartPreviewOpen] = useState(false);
+  const [cartNotification, setCartNotification] = useState(null);
   const recognitionRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -91,13 +94,33 @@ const ModernChatInterface = ({
 
   const toggleVoiceInput = () => {
     if (isListening) {
-      recognitionRef.current?.stop();
+      try {
+        recognitionRef.current?.stop();
+      } catch (error) {
+        console.log('Error stopping recognition:', error);
+      }
       setIsListening(false);
     } else {
       if (recognitionRef.current) {
-        recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
-        recognitionRef.current.start();
-        setIsListening(true);
+        try {
+          // Always stop first to ensure clean state
+          recognitionRef.current.stop();
+        } catch (error) {
+          // Ignore stop errors
+        }
+        
+        setTimeout(() => {
+          if (recognitionRef.current && !isListening) {
+            try {
+              recognitionRef.current.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+              recognitionRef.current.start();
+              setIsListening(true);
+            } catch (error) {
+              console.error('Error starting recognition:', error);
+              setIsListening(false);
+            }
+          }
+        }, 100);
       } else {
         alert('Speech recognition not supported in your browser');
       }
@@ -259,6 +282,25 @@ const ModernChatInterface = ({
     setChatHistory(prev => [...prev, confirmationMessage]);
   };
 
+  const handleCartUpdate = (cartSummary) => {
+    // Show cart notification
+    setCartNotification({
+      message: `Cart updated! ${cartSummary.total_items} items - €${cartSummary.total_price.toFixed(2)}`,
+      type: 'success'
+    });
+    
+    // Clear notification after 3 seconds
+    setTimeout(() => setCartNotification(null), 3000);
+    
+    // Open cart preview briefly to show update
+    setCartPreviewOpen(true);
+    setTimeout(() => setCartPreviewOpen(false), 2000);
+  };
+
+  const toggleCartPreview = () => {
+    setCartPreviewOpen(!cartPreviewOpen);
+  };
+
   return (
     <div className="flex flex-col h-full bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden">
       {/* Header */}
@@ -318,6 +360,9 @@ const ModernChatInterface = ({
             message={message} 
             onActionClick={handleActionClick}
             explanations={message.type === 'results' ? explanations : {}}
+            sessionId={sessionId}
+            onCartUpdate={handleCartUpdate}
+            apiBaseUrl={apiBaseUrl}
           />
         ))}
         
@@ -377,6 +422,28 @@ const ModernChatInterface = ({
           </div>
         </div>
       </div>
+
+      {/* Cart Preview */}
+      <CartPreview
+        sessionId={sessionId}
+        isOpen={cartPreviewOpen}
+        onClose={() => setCartPreviewOpen(false)}
+        onToggle={toggleCartPreview}
+        apiBaseUrl={apiBaseUrl}
+      />
+
+      {/* Cart Notification */}
+      {cartNotification && (
+        <div className="fixed top-4 right-4 z-60">
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg ${
+            cartNotification.type === 'success' 
+              ? 'bg-green-600 text-white' 
+              : 'bg-red-600 text-white'
+          }`}>
+            <span className="text-sm">{cartNotification.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

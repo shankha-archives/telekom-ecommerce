@@ -5,6 +5,8 @@ from openai import AsyncOpenAI
 import re
 import math
 from datetime import datetime, timedelta
+from semantic_search import semantic_search_products, initialize_semantic_search
+from knowledge_base import knowledge_base
 
 # Load environment variables
 load_dotenv()
@@ -22,6 +24,28 @@ def get_openai_client():
     if OPENAI_API_KEY and openai_client is None:
         openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
     return openai_client
+
+def initialize_rag_system(all_devices, all_plans):
+    """
+    Initialize the enhanced RAG system with product data and tariff data for semantic search
+    
+    Args:
+        all_devices: List of all devices
+        all_plans: List of all plans
+    """
+    try:
+        # Get tariff data from knowledge base
+        tariff_data = knowledge_base.tariff_data if knowledge_base.initialized else None
+        
+        success = initialize_semantic_search(all_devices, all_plans, tariff_data)
+        if success:
+            print("DEBUG: Enhanced RAG system initialized successfully with tariff data")
+        else:
+            print("DEBUG: RAG system initialization failed or not available")
+        return success
+    except Exception as e:
+        print(f"DEBUG: Error initializing enhanced RAG system: {str(e)}")
+        return False
 
 def generate_weighted_recommendations(session_data, all_devices, all_plans, query=None):
     """
@@ -403,6 +427,140 @@ def generate_weighted_recommendations(session_data, all_devices, all_plans, quer
         'device_explanations': device_explanation_dict,
         'plan_explanations': plan_explanation_dict
     }
+
+def generate_rag_enhanced_recommendations(session_data, all_devices, all_plans, query=None):
+    """
+    Generate recommendations with RAG enhancement for better semantic understanding.
+    Falls back to original recommendations if RAG is not available.
+    
+    Args:
+        session_data: User session data
+        all_devices: List of all devices
+        all_plans: List of all plans
+        query: Search query string
+        
+    Returns:
+        Enhanced recommendations with semantic matching
+    """
+    print(f"DEBUG: Starting RAG-enhanced recommendation generation")
+    print(f"DEBUG: Query: {query}")
+    
+    # Get base recommendations using existing weighted scoring
+    base_recommendations = generate_weighted_recommendations(session_data, all_devices, all_plans, query)
+    
+    # If no query or query is too short, return base recommendations
+    if not query or len(query.strip()) < 10:
+        print("DEBUG: Query too short for semantic search, using base recommendations")
+        return base_recommendations
+    
+    try:
+        # Perform semantic search for complex queries
+        semantic_results = semantic_search_products(query, "both")
+        
+        if not semantic_results or (not semantic_results.get("devices") and not semantic_results.get("plans")):
+            print("DEBUG: No semantic results found, using base recommendations")
+            return base_recommendations
+        
+        print(f"DEBUG: Found {len(semantic_results.get('devices', []))} semantic device matches")
+        print(f"DEBUG: Found {len(semantic_results.get('plans', []))} semantic plan matches")
+        
+        # Apply semantic boost to existing device scores
+        enhanced_device_scores = {}
+        device_explanations = base_recommendations.get('device_explanations', {})
+        
+        for device in all_devices:
+            device_id = device['id']
+            base_score = 0
+            
+            # Find base score from existing recommendations
+            for base_device in base_recommendations.get('devices', []):
+                if base_device.get('id') == device_id:
+                    base_score = 0.5  # Give base recommendations initial boost
+                    break
+            
+            # Apply semantic similarity boost
+            semantic_score = 0
+            for sem_device_id, sim_score in semantic_results.get("devices", []):
+                if sem_device_id == device_id:
+                    semantic_score = sim_score * 0.3  # 30% weight for semantic similarity
+                    break
+            
+            # Combine scores
+            final_score = base_score + semantic_score
+            if final_score > 0:
+                enhanced_device_scores[device_id] = final_score
+                
+                # Add semantic explanation
+                if device_id not in device_explanations:
+                    device_explanations[device_id] = []
+                if semantic_score > 0.2:  # Only add if significant semantic match
+                    device_explanations[device_id].append(f"Semantically matches your search query")
+        
+        # Apply semantic boost to existing plan scores
+        enhanced_plan_scores = {}
+        plan_explanations = base_recommendations.get('plan_explanations', {})
+        
+        for plan in all_plans:
+            plan_id = plan['id']
+            base_score = 0
+            
+            # Find base score from existing recommendations
+            for base_plan in base_recommendations.get('plans', []):
+                if base_plan.get('id') == plan_id:
+                    base_score = 0.5  # Give base recommendations initial boost
+                    break
+            
+            # Apply semantic similarity boost
+            semantic_score = 0
+            for sem_plan_id, sim_score in semantic_results.get("plans", []):
+                if sem_plan_id == plan_id:
+                    semantic_score = sim_score * 0.3  # 30% weight for semantic similarity
+                    break
+            
+            # Combine scores
+            final_score = base_score + semantic_score
+            if final_score > 0:
+                enhanced_plan_scores[plan_id] = final_score
+                
+                # Add semantic explanation
+                if plan_id not in plan_explanations:
+                    plan_explanations[plan_id] = []
+                if semantic_score > 0.2:  # Only add if significant semantic match
+                    plan_explanations[plan_id].append(f"Semantically matches your search query")
+        
+        # Sort by enhanced scores and return top recommendations
+        top_device_ids = sorted(enhanced_device_scores.items(), key=lambda x: x[1], reverse=True)[:5]
+        top_plan_ids = sorted(enhanced_plan_scores.items(), key=lambda x: x[1], reverse=True)[:3]
+        
+        # Map IDs to full objects
+        enhanced_devices = []
+        for device_id, score in top_device_ids:
+            device = next((d for d in all_devices if d['id'] == device_id), None)
+            if device:
+                enhanced_devices.append(device)
+        
+        enhanced_plans = []
+        for plan_id, score in top_plan_ids:
+            plan = next((p for p in all_plans if p['id'] == plan_id), None)
+            if plan:
+                enhanced_plans.append(plan)
+        
+        # If we have enhanced results, return them
+        if enhanced_devices or enhanced_plans:
+            print(f"DEBUG: Returning {len(enhanced_devices)} enhanced devices and {len(enhanced_plans)} enhanced plans")
+            return {
+                'devices': enhanced_devices if enhanced_devices else base_recommendations.get('devices', []),
+                'plans': enhanced_plans if enhanced_plans else base_recommendations.get('plans', []),
+                'device_explanations': device_explanations,
+                'plan_explanations': plan_explanations
+            }
+        
+    except Exception as e:
+        print(f"DEBUG: Error in RAG enhancement: {str(e)}")
+    
+    # Fallback to base recommendations
+    print("DEBUG: Falling back to base recommendations")
+    return base_recommendations
 
 async def generate_recommendation_summary(recommendations, preferences, query=None):
     """

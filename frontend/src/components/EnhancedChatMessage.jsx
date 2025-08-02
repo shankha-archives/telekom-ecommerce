@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { Info, Check, X, ThumbsUp, ThumbsDown } from 'lucide-react';
+import AddToCartButton from './AddToCartButton';
 
 /**
  * Enhanced Chat Message Component
@@ -14,7 +15,7 @@ import { Info, Check, X, ThumbsUp, ThumbsDown } from 'lucide-react';
  * - 'preferences': User preference summaries
  * - 'comparison': Product comparison views
  */
-const EnhancedChatMessage = ({ message, onActionClick, explanations = {} }) => {
+const EnhancedChatMessage = ({ message, onActionClick, explanations = {}, sessionId, onCartUpdate, apiBaseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001' }) => {
   // Handler for suggested question clicks
   const handleSuggestionClick = (question) => {
     if (onActionClick) {
@@ -41,7 +42,10 @@ const EnhancedChatMessage = ({ message, onActionClick, explanations = {} }) => {
                   key={device.id} 
                   device={device} 
                   showInChat={true}
-                  explanation={explanations?.device_explanations?.[device.id] || []} 
+                  explanation={explanations?.device_explanations?.[device.id] || []}
+                  sessionId={sessionId}
+                  onCartUpdate={onCartUpdate}
+                  apiBaseUrl={apiBaseUrl}
                 />
               ))}
             </div>
@@ -58,6 +62,9 @@ const EnhancedChatMessage = ({ message, onActionClick, explanations = {} }) => {
                   plan={plan} 
                   showInChat={true} 
                   explanation={explanations?.plan_explanations?.[plan.id] || []}
+                  sessionId={sessionId}
+                  onCartUpdate={onCartUpdate}
+                  apiBaseUrl={apiBaseUrl}
                 />
               ))}
             </div>
@@ -198,7 +205,7 @@ const EnhancedChatMessage = ({ message, onActionClick, explanations = {} }) => {
 };
 
 // Enhanced Device Card with Explanations
-const EnhancedDeviceCard = ({ device, showInChat = false, explanation = [] }) => (
+const EnhancedDeviceCard = ({ device, showInChat = false, explanation = [], sessionId, onCartUpdate, apiBaseUrl }) => (
   <Card className={`group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white/90 backdrop-blur-sm border-0 shadow-lg ${showInChat ? 'mb-4' : ''}`}>
     <CardContent className="p-4">
       <div className="flex items-start gap-3">
@@ -235,12 +242,17 @@ const EnhancedDeviceCard = ({ device, showInChat = false, explanation = [] }) =>
           )}
           
           <div className="mt-2">
-            <Button 
-              className="bg-magenta-600 hover:bg-magenta-700 text-white px-3 py-1 rounded-lg transition-colors text-xs"
+            <AddToCartButton
+              item={device}
+              itemType="device"
+              sessionId={sessionId}
+              onCartUpdate={onCartUpdate}
+              apiBaseUrl={apiBaseUrl}
               size={showInChat ? "sm" : "default"}
+              className="bg-magenta-600 hover:bg-magenta-700 text-white px-3 py-1 rounded-lg transition-colors text-xs"
             >
               Add to Cart
-            </Button>
+            </AddToCartButton>
           </div>
         </div>
       </div>
@@ -249,7 +261,7 @@ const EnhancedDeviceCard = ({ device, showInChat = false, explanation = [] }) =>
 );
 
 // Enhanced Plan Card with Explanations
-const EnhancedPlanCard = ({ plan, showInChat = false, explanation = [] }) => (
+const EnhancedPlanCard = ({ plan, showInChat = false, explanation = [], sessionId, onCartUpdate, apiBaseUrl }) => (
   <Card className={`relative transition-all duration-300 hover:shadow-xl ${plan.popular ? 'ring-1 ring-magenta-500' : ''} bg-white/90 backdrop-blur-sm border-0 shadow-lg ${showInChat ? 'mb-4' : ''}`}>
     <CardContent className="p-4">
       <div className="flex items-start gap-3">
@@ -289,12 +301,17 @@ const EnhancedPlanCard = ({ plan, showInChat = false, explanation = [] }) => (
           )}
           
           <div className="mt-2">
-            <Button 
-              className="bg-magenta-600 hover:bg-magenta-700 text-white px-3 py-1 rounded-lg transition-colors text-xs"
+            <AddToCartButton
+              item={plan}
+              itemType="plan"
+              sessionId={sessionId}
+              onCartUpdate={onCartUpdate}
+              apiBaseUrl={apiBaseUrl}
               size={showInChat ? "sm" : "default"}
+              className="bg-magenta-600 hover:bg-magenta-700 text-white px-3 py-1 rounded-lg transition-colors text-xs"
             >
               Choose Plan
-            </Button>
+            </AddToCartButton>
           </div>
         </div>
       </div>
